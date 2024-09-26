@@ -2,7 +2,6 @@ package app.solution.swing_by.feature
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
 import com.google.android.material.chip.Chip
