@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import app.solution.swing_by.databinding.ActivityMainBinding
+import app.solution.swing_by.feature.AuthActivity
 import app.solution.swing_by.feature.WriteMemoActivity
 
 class MainActivity : AppCompatActivity() {
@@ -18,8 +19,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val intent = Intent(this, WriteMemoActivity::class.java)
+        val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
+
+//        val intent = Intent(this, WriteMemoActivity::class.java)
+//        startActivity(intent)
 
 //        enableEdgeToEdge()
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".feature.WriteMemoActivity" />
+        <activity android:name=".feature.AuthActivity" />
+        <activity android:name=".feature.SignUpActivity" />
     </application>
 
 </manifest>
