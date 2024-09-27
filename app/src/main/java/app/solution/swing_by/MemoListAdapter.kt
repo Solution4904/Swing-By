@@ -38,7 +38,7 @@ class MemoListAdapter : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ
     companion object {
         val differ = object : DiffUtil.ItemCallback<MemoItem>() {
             override fun areItemsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem === newItem
             }
 
             override fun areContentsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
