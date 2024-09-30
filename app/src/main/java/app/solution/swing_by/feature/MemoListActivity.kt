@@ -2,10 +2,10 @@ package app.solution.swing_by.feature
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.MemoListAdapter
+import app.solution.swing_by.constant.FirebaseObject
 import app.solution.swing_by.databinding.ActivityMemoListBinding
 import app.solution.swing_by.item.MemoItem
 import com.google.firebase.auth.ktx.auth
@@ -34,11 +34,12 @@ class MemoListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
             adapter = memoListAdapter
         }
+        memoListAdapter.notifyDataSetChanged()
 
         val currentUser = Firebase.auth.currentUser
         val currentUid = currentUser?.uid.orEmpty()
-        Firebase.database.reference.child(currentUid)
-            .addValueEventListener(object : ValueEventListener {
+        Firebase.database.reference.child(FirebaseObject.DB_MEMOLIST).child(currentUid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val list = snapshot.children.map {
                         it.getValue(MemoItem::class.java)

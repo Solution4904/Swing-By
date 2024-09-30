@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import app.solution.swing_by.constant.FirebaseObject
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.util.UUID
+import kotlin.random.Random
 
 class WriteMemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWriteMemoBinding
@@ -59,7 +62,7 @@ class WriteMemoActivity : AppCompatActivity() {
         memoModel["desc"] = binding.etDesc.text.toString()
         memoModel["location"] = binding.etLocation.text.toString()
 
-        Firebase.database.reference.child(currentUid).updateChildren(memoModel)
+        Firebase.database.reference.child(FirebaseObject.DB_MEMOLIST).child(currentUid).child(UUID.randomUUID().toString()).setValue(memoModel)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     Toast.makeText(this, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
