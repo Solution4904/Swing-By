@@ -2,6 +2,7 @@ package app.solution.swing_by.feature
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.MemoListAdapter
@@ -18,14 +19,20 @@ import com.google.firebase.ktx.Firebase
 class MemoListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMemoListBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMemoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setMemoList()
         setButtons()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        setMemoList()
     }
 
     private fun setMemoList() {
@@ -34,7 +41,6 @@ class MemoListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
             adapter = memoListAdapter
         }
-        memoListAdapter.notifyDataSetChanged()
 
         val currentUser = Firebase.auth.currentUser
         val currentUid = currentUser?.uid.orEmpty()
@@ -44,7 +50,7 @@ class MemoListActivity : AppCompatActivity() {
                     val list = snapshot.children.map {
                         it.getValue(MemoItem::class.java)
                     }
-                    memoListAdapter.submitList(list)
+                    memoListAdapter.submitList(list.toMutableList())
                 }
 
                 override fun onCancelled(error: DatabaseError) {}

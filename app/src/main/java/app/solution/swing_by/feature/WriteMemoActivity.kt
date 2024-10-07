@@ -58,9 +58,9 @@ class WriteMemoActivity : AppCompatActivity() {
         val currentUid = currentUser?.uid.orEmpty()
 
         val memoModel = mutableMapOf<String, Any>()
-        memoModel["title"] = binding.etTitle.text.toString()
-        memoModel["desc"] = binding.etDesc.text.toString()
-        memoModel["location"] = binding.etLocation.text.toString()
+        memoModel[FirebaseObject.DB_MEMO_TITLE] = binding.etTitle.text.toString()
+        memoModel[FirebaseObject.DB_MEMO_DESCRIPTION] = binding.etDescription.text.toString()
+        memoModel[FirebaseObject.DB_MEMO_LOCATION] = binding.etLocation.text.toString()
 
         Firebase.database.reference.child(FirebaseObject.DB_MEMOLIST).child(currentUid).child(UUID.randomUUID().toString()).setValue(memoModel)
             .addOnCompleteListener {
