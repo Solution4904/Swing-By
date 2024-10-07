@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,6 +27,10 @@
         <activity android:name=".feature.AuthActivity" />
         <activity android:name=".feature.SignUpActivity" />
         <activity android:name=".feature.MemoListActivity" />
+
+        <meta-data
+            android:name="com.kakao.vectormap.APP_KEY"
+            android:value="04ca7a8f242fe9f9b865a64d4ee76bc2"/>
     </application>
 
 </manifest>

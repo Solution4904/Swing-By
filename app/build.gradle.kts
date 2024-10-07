@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,6 +9,7 @@ plugins {
 
     id("com.google.gms.google-services")
 }
+
 
 android {
     namespace = "app.solution.swing_by"
@@ -57,6 +61,9 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.database.ktx)
+
+    /* Kakao Map API */
+    implementation("com.kakao.maps.open.android:2.11.9")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
