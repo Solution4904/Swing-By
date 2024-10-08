@@ -63,7 +63,9 @@ dependencies {
     implementation(libs.firebase.database.ktx)
 
     /* Kakao Map API */
-    implementation("com.kakao.maps.open.android:2.11.9")
+//    implementation("com.kakao.sdk:v2-all:2.20.6")
+    implementation("com.kakao.maps.open:android:2.12.7")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

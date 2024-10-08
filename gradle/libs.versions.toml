@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+android = "2.12.7"
 firebaseBom = "33.3.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -13,6 +14,7 @@ constraintlayout = "2.1.4"
 roomRuntime = "room_version"
 
 [libraries]
+android = { module = "com.kakao.maps.open:android", version.ref = "android" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
