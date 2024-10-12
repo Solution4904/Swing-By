@@ -4,16 +4,16 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.TimeUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import app.solution.swing_by.KakaoMapService
 import app.solution.swing_by.KeywordSerchingResultData
+import app.solution.swing_by.NotificationManager
 import app.solution.swing_by.Place
 import app.solution.swing_by.databinding.ActivityMapBinding
 import com.google.android.gms.location.LocationServices
-import com.google.gson.Gson
+import com.google.firebase.database.core.utilities.Utilities
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -22,7 +22,6 @@ import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import retrofit2.Call
 import retrofit2.Callback
-import retrofit2.OptionalConverterFactory
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -77,7 +76,9 @@ class MapActivity : AppCompatActivity() {
                 moveToPosition(x.toDouble(), y.toDouble())
             }
 
-            btnTracking.setOnClickListener { trackMyLocation() }
+            btnTracking.setOnClickListener {
+                trackMyLocation()
+            }
 
             btnSerch.setOnClickListener { serching() }
         }
@@ -98,6 +99,13 @@ class MapActivity : AppCompatActivity() {
                 for (document in p1.body()!!.documents) {
                     Log.d("SOL_LOG", "document\n$document")
                     nearbySerchResults.add(document)
+
+                    // Notification Test
+                    val notificationManager = NotificationManager(this@MapActivity)
+                    notificationManager.showNotification(
+                        binding.etKeyword.text.toString(),
+                        "${document.place_name} (${document.distance}m)"
+                    )
                 }
 
 //                Log.d("SOL_LOG", "검색 결과 갯수 : ${nearbySerchResults.count()}")
