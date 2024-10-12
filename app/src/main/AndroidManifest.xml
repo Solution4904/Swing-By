@@ -32,9 +32,25 @@
         <activity android:name=".feature.MemoListActivity" />
         <activity android:name=".feature.MapActivity" />
 
+        <!--KakaoMap API KEY-->
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="04ca7a8f242fe9f9b865a64d4ee76bc2" />
+
+        <!--App Widget-->
+        <receiver
+            android:name=".AppWidgetProvider"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_info" />
+        </receiver>
+
     </application>
 
 </manifest>
