@@ -20,6 +20,7 @@ dependencyResolutionManagement {
         maven {
             // Kakao Map
             url = uri("https://devrepo.kakao.com/nexus/repository/kakaomap-releases/")
+            url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/")
 
             // Kakao SDK Utility (gethash())
 //            url = uri("https://devrepo.kakao.com/nexus/content/groups/public/")

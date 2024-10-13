@@ -11,6 +11,7 @@ import app.solution.swing_by.KakaoMapService
 import app.solution.swing_by.KeywordSerchingResultData
 import app.solution.swing_by.NotificationManager
 import app.solution.swing_by.Place
+import app.solution.swing_by.constant.KakaoAPI
 import app.solution.swing_by.databinding.ActivityMapBinding
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.database.core.utilities.Utilities
@@ -86,7 +87,7 @@ class MapActivity : AppCompatActivity() {
 
     private fun serching() {
         retrofit = Retrofit.Builder()
-            .baseUrl("https://dapi.kakao.com/v2/local/")
+            .baseUrl(KakaoAPI.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

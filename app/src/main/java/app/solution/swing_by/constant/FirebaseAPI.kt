@@ -1,6 +1,6 @@
 package app.solution.swing_by.constant
 
-class FirebaseObject {
+class FirebaseAPI {
     companion object{
         const val DB_MEMOLIST = "MEMOLIST"
 
