@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+
+# Kakao
 -keep class com.kakao.vectormap.** { *; }
 -keep interface com.kakao.vectormap.**
 

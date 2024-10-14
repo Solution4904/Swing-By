@@ -30,9 +30,7 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setButtons() {
         with(binding) {
-            btnGoogleAccountLinking.setOnClickListener { }
             btnKakaoAccountLinking.setOnClickListener { kakaoSignIn() }
-            btnNaverAccountLinking.setOnClickListener { }
 
             btnSignup.setOnClickListener { signUp() }
 
