@@ -4,9 +4,11 @@ import app.solution.swing_by.constant.KakaoAPI
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface KakaoMapService {
+interface KakaoAPIService {
+    // 카카오맵 장소 검색 결과
     @GET("search/keyword.json")
     fun getSerchingResult(
         @Header("Authorization") Authorization: String = "KakaoAK ${KakaoAPI.REST_API_KEY}",

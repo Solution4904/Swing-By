@@ -17,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 
 class MemoListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMemoListBinding
+    private lateinit var currentUid: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +25,8 @@ class MemoListActivity : AppCompatActivity() {
 
         binding = ActivityMemoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        currentUid = intent.getStringExtra("UID").toString()
 
         setButtons()
     }
@@ -41,8 +44,6 @@ class MemoListActivity : AppCompatActivity() {
             adapter = memoListAdapter
         }
 
-        val currentUser = Firebase.auth.currentUser
-        val currentUid = currentUser?.uid.orEmpty()
         Firebase.database.reference.child(FirebaseAPI.DB_MEMOLIST).child(currentUid)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -60,6 +61,7 @@ class MemoListActivity : AppCompatActivity() {
         with(binding) {
             fbtnAdd.setOnClickListener {
                 val intent = Intent(this@MemoListActivity, WriteMemoActivity::class.java)
+                intent.putExtra("UID", currentUid)
                 startActivity(intent)
             }
         }
