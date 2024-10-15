@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import app.solution.swing_by.MyApplication
 import app.solution.swing_by.databinding.ActivityAuthBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -60,7 +61,8 @@ class AuthActivity : AppCompatActivity() {
                     Log.d("이메일 로그인", "${it.result.user?.email} / ${it.result.user?.uid}")
 
                     val intent = Intent(this, MemoListActivity::class.java)
-                    intent.putExtra("UID", it.result.user?.uid)
+//                    intent.putExtra("UID", it.result.user?.uid)
+                    MyApplication.userUid = it.result.user?.uid.toString()
                     startActivity(intent)
                     finish()
                 } else {
@@ -71,14 +73,6 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun kakaoSignIn() {
-//        UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-//            if (error != null) {
-//                Log.e("SOL_LOG", "로그인 실패", error)
-//            } else if (token != null) {
-//                Log.i("SOL_LOG", "로그인 성공 ${token.accessToken}")
-//            }
-//        }
-
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 when {
@@ -124,7 +118,8 @@ class AuthActivity : AppCompatActivity() {
                         Log.d("[카카오로그인]", "로그인에 성공하였습니다.\n${token.accessToken}\n\"닉네임: ${user?.kakaoAccount?.profile?.nickname}\"\nUID: ${tokenInfo?.id.toString()}")
 
                         val intent = Intent(this, MemoListActivity::class.java)
-                        intent.putExtra("UID", tokenInfo?.id.toString())
+//                        intent.putExtra("UID", tokenInfo?.id.toString())
+                        MyApplication.userUid = tokenInfo?.id.toString()
                         startActivity(intent)
                     }
                 }
