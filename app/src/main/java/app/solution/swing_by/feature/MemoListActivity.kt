@@ -2,6 +2,7 @@ package app.solution.swing_by.feature
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.MemoListAdapter
@@ -17,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 
 class MemoListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMemoListBinding
+    private lateinit var memoListAdapter: MemoListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,23 +37,25 @@ class MemoListActivity : AppCompatActivity() {
     }
 
     private fun setMemoList() {
-        val memoListAdapter = MemoListAdapter()
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val list = snapshot.children.map {
+                    it.getValue(MemoItem::class.java)
+                }
+                memoListAdapter.submitList(list.toMutableList())
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        }
+
+        memoListAdapter = MemoListAdapter(valueEventListener)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = memoListAdapter
         }
 
         Firebase.database.reference.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.userUid)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val list = snapshot.children.map {
-                        it.getValue(MemoItem::class.java)
-                    }
-                    memoListAdapter.submitList(list.toMutableList())
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
+            .addListenerForSingleValueEvent(valueEventListener)
     }
 
     private fun setButtons() {
