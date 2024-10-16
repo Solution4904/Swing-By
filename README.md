@@ -15,3 +15,4 @@
 - UI/UX 트랜드 따라가기
 - API KEY 등 git에 공유되면 안되는 것들 비공개하는 방법
 - 전역 변수를 저장해두고 사용하는 방법
+- 전체 코드 리뷰 (= FirebaseAPI Apdater, MyApplication userUID 등...)
