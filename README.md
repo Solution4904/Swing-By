@@ -16,3 +16,6 @@
 - API KEY 등 git에 공유되면 안되는 것들 비공개하는 방법
 - 전역 변수를 저장해두고 사용하는 방법
 - 전체 코드 리뷰 (= FirebaseAPI Apdater, MyApplication userUID 등...)
+- 입력된 텍스트들을 Strings.xml에 저장 & 사용  
+- 파이어베이스 권한 조건 지정 (지금은 전부 true)
+- 이메일 가입 시 이메일조건 및 비밀번호 6자리이상 등의 내부 규칙이 있음. 레이아웃이나 Toast로 명시할 것

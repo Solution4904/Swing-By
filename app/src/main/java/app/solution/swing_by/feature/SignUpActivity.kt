@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivitySignupBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -32,23 +33,16 @@ class SignUpActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "필요 항목이 입력되지 않았습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        Firebase.auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                // 회원가입 성공
-                if (it.isSuccessful) {
-                    Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-                // 회원가입 실패
-                else {
-                    Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
-                    Log.d("SOL_LOG", "${it.exception}")
-                    Log.d("SOL_LOG", "$email / $password")
-                }
+        FirebaseAPI.signUp(email, password, object : FirebaseAPI.FirebaseCallback {
+            override fun successCallback() {
+                finish()
             }
+
+            override fun failureCallback() {}
+        })
     }
 }
