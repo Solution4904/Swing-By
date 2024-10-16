@@ -80,6 +80,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="네이버 계정 연동" />
+
+            <Button
+                android:id="@+id/btn_temp_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="임시 맵 이동" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

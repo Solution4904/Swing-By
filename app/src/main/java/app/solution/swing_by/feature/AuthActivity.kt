@@ -29,6 +29,11 @@ class AuthActivity : AppCompatActivity() {
             btnSignup.setOnClickListener { signUp() }
 
             btnSignin.setOnClickListener { signIn() }
+
+            btnTempMap.setOnClickListener {
+                val intent = Intent(baseContext, MapActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
