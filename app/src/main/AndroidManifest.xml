@@ -27,8 +27,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".feature.WriteMemoActivity" />
+        <activity android:name=".feature.AuthActivity" />
         <activity
-            android:name=".feature.AuthActivity"
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

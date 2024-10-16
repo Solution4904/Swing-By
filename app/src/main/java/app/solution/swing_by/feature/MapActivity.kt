@@ -4,17 +4,15 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import android.util.TimeUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import app.solution.swing_by.KakaoMapService
+import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
 import app.solution.swing_by.NotificationManager
-import app.solution.swing_by.Place
+import app.solution.swing_by.Document
 import app.solution.swing_by.constant.KakaoAPI
 import app.solution.swing_by.databinding.ActivityMapBinding
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.database.core.utilities.Utilities
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -32,7 +30,7 @@ class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var kakaoMap: KakaoMap
     private lateinit var retrofit: Retrofit
-    private val nearbySerchResults = mutableListOf<Place>()
+    private val nearbySerchResults = mutableListOf<Document>()
     private var latitude: String = ""
     private var longitude: String = ""
 
@@ -91,7 +89,7 @@ class MapActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val retrofitService = retrofit.create(KakaoMapService::class.java)
+        val retrofitService = retrofit.create(KakaoAPIService::class.java)
         retrofitService.getSerchingResult(query = binding.etKeyword.text.toString(), x = longitude, y = latitude).enqueue(object : Callback<KeywordSerchingResultData> {
             override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
 //                Log.d("SOL_LOG", p1.body().toString())

@@ -14,12 +14,16 @@ import java.util.UUID
 
 class WriteMemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWriteMemoBinding
+    private lateinit var loginType: String
+    private lateinit var currentUid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityWriteMemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        currentUid = intent.getStringExtra("UID").toString()
 
         setChipButtons()
         setButtons()
@@ -53,8 +57,8 @@ class WriteMemoActivity : AppCompatActivity() {
     }
 
     private fun registerMemo() {
-        val currentUser = Firebase.auth.currentUser
-        val currentUid = currentUser?.uid.orEmpty()
+//        val currentUser = Firebase.auth.currentUser
+//        val currentUid = currentUser?.uid.orEmpty()
 
         val memoModel = mutableMapOf<String, Any>()
         memoModel[FirebaseAPI.DB_MEMO_TITLE] = binding.etTitle.text.toString()

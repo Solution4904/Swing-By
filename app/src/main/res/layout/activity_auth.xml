@@ -61,25 +61,11 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <Button
-                android:id="@+id/btn_google_account_linking"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Google 계정 연동" />
-
-            <Button
                 android:id="@+id/btn_kakao_account_linking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="카카오 계정 연동" />
-
-            <Button
-                android:id="@+id/btn_naver_account_linking"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="네이버 계정 연동" />
 
             <Button
                 android:id="@+id/btn_temp_map"

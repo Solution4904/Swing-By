@@ -52,21 +52,16 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    /* Room */
-//    implementation(libs.androidx.room.runtime)
-//    annotationProcessor(libs.androidx.room.compiler)
-
     /* Firebase */
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.database.ktx)
 
-    /* Kakao Map API */
-//    implementation("com.kakao.sdk:v2-all:2.20.6")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation("com.kakao.maps.open:android:2.12.7")
-
+    /* Kakao API */
+    implementation("com.google.android.gms:play-services-location:21.3.0")  // Map
+    implementation("com.kakao.maps.open:android:2.12.7")                    // Map
+    implementation("com.kakao.sdk:v2-user:2.20.6")                          // Login
 
     /* Retrofit */
     implementation(libs.retrofit)
