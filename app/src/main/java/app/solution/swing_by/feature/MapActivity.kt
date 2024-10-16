@@ -4,13 +4,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
 import app.solution.swing_by.NotificationManager
 import app.solution.swing_by.Document
-import app.solution.swing_by.constant.KakaoAPI
+import app.solution.swing_by.constant.KakaoConstant
 import app.solution.swing_by.databinding.ActivityMapBinding
 import com.google.android.gms.location.LocationServices
 import com.kakao.vectormap.KakaoMap
@@ -85,7 +86,7 @@ class MapActivity : AppCompatActivity() {
 
     private fun serching() {
         retrofit = Retrofit.Builder()
-            .baseUrl(KakaoAPI.BASE_URL)
+            .baseUrl(KakaoConstant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -131,11 +132,14 @@ class MapActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
+            Toast.makeText(this, "위치 권한이 없습니다.", Toast.LENGTH_SHORT).show()
             return
         }
         fusedLocationClient.lastLocation.addOnSuccessListener {
             it?.let {
-                // TODO: lastLocation이 없는 경우 NPE으로 강제 종료되는 문제가 있음.  
+                Toast.makeText(this, "위치가 확인되었습니다.", Toast.LENGTH_SHORT).show()
+                // TODO: lastLocation이 없는 경우 NPE으로 강제 종료되는 문제가 있음.
+                // TODO: 위치 권한을 거절했던, 재설치했건 재요청하는 기능 필요.
                 Log.d("SOL_LOG", "trackMyLocation: ${it.latitude}, ${it.longitude}")
                 moveToPosition(it.latitude, it.longitude)
             }

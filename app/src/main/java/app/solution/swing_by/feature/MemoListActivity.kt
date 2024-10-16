@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.MemoListAdapter
-import app.solution.swing_by.constant.FirebaseAPI
+import app.solution.swing_by.MyApplication
+import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ActivityMemoListBinding
 import app.solution.swing_by.item.MemoItem
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -17,7 +17,6 @@ import com.google.firebase.ktx.Firebase
 
 class MemoListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMemoListBinding
-    private lateinit var currentUid: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +24,6 @@ class MemoListActivity : AppCompatActivity() {
 
         binding = ActivityMemoListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        currentUid = intent.getStringExtra("UID").toString()
 
         setButtons()
     }
@@ -44,7 +41,7 @@ class MemoListActivity : AppCompatActivity() {
             adapter = memoListAdapter
         }
 
-        Firebase.database.reference.child(FirebaseAPI.DB_MEMOLIST).child(currentUid)
+        Firebase.database.reference.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.userUid)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val list = snapshot.children.map {
@@ -61,7 +58,6 @@ class MemoListActivity : AppCompatActivity() {
         with(binding) {
             fbtnAdd.setOnClickListener {
                 val intent = Intent(this@MemoListActivity, WriteMemoActivity::class.java)
-                intent.putExtra("UID", currentUid)
                 startActivity(intent)
             }
         }
