@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.MemoListAdapter
 import app.solution.swing_by.MyApplication
+import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ActivityMemoListBinding
 import app.solution.swing_by.item.MemoItem
@@ -37,25 +38,13 @@ class MemoListActivity : AppCompatActivity() {
     }
 
     private fun setMemoList() {
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val list = snapshot.children.map {
-                    it.getValue(MemoItem::class.java)
-                }
-                memoListAdapter.submitList(list.toMutableList())
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        }
-
-        memoListAdapter = MemoListAdapter(valueEventListener)
+        memoListAdapter = MemoListAdapter()
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = memoListAdapter
         }
 
-        Firebase.database.reference.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.userUid)
-            .addListenerForSingleValueEvent(valueEventListener)
+        FirebaseAPI.refreshMemoList(memoListAdapter)
     }
 
     private fun setButtons() {
