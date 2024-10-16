@@ -6,6 +6,7 @@ import app.solution.swing_by.MyApplication
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.item.MemoItem
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -21,6 +22,7 @@ class FirebaseAPI {
     companion object {
         private const val TAG = "SOL_LOG"
         private val FirebaseDatabase = Firebase.database.reference
+        private val FirebaseAuth = Firebase.auth
 
         private lateinit var myAdapter: MemoListAdapter
 
@@ -70,6 +72,36 @@ class FirebaseAPI {
                         callback?.successCallback()
                     } else {
                         Log.e(TAG, "registerMemo: ${it.exception?.stackTrace}")
+                        callback?.failureCallback()
+                    }
+                }
+        }
+
+        // 이메일 로그인
+        fun signIn(email: String, password: String, callback: FirebaseCallback? = null) {
+            FirebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.d("이메일 로그인", "${it.result.user?.email} / ${it.result.user?.uid}")
+
+                        MyApplication.userUid = it.result.user?.uid.toString()
+
+                        callback?.successCallback()
+                    } else {
+                        it.exception?.stackTrace
+
+                        callback?.failureCallback()
+                    }
+                }
+        }
+
+        // 이메일 가입
+        fun signUp(email: String, password: String, callback: FirebaseCallback? = null) {
+            FirebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        callback?.successCallback()
+                    } else {
                         callback?.failureCallback()
                     }
                 }

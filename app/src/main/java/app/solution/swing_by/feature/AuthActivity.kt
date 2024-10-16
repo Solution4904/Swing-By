@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.MyApplication
+import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.databinding.ActivityAuthBinding
 import com.google.firebase.auth.ktx.auth
@@ -45,23 +46,19 @@ class AuthActivity : AppCompatActivity() {
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
 
-        if (email.isEmpty() || password.isEmpty()) return
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        Firebase.auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.d("이메일 로그인", "${it.result.user?.email} / ${it.result.user?.uid}")
-
-                    val intent = Intent(this, MemoListActivity::class.java)
-//                    intent.putExtra("UID", it.result.user?.uid)
-                    MyApplication.userUid = it.result.user?.uid.toString()
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Toast.makeText(this, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    it.exception?.stackTrace
-                }
+        FirebaseAPI.signIn(email, password, object : FirebaseAPI.FirebaseCallback {
+            override fun successCallback() {
+                val intent = Intent(this@AuthActivity, MemoListActivity::class.java)
+                startActivity(intent)
             }
+
+            override fun failureCallback() {}
+        })
     }
 
     private fun kakaoSignIn() {
