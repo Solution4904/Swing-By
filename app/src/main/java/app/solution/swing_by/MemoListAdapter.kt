@@ -14,7 +14,7 @@ class MemoListAdapter : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ
         fun bind(item: MemoItem) {
             with(binding) {
                 tvTitle.text = item.title
-                tvDec.text = item.dec
+                tvDescription.text = item.description
                 tvLocation.text = item.location
             }
         }

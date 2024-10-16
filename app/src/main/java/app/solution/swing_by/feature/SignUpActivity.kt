@@ -28,8 +28,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp() {
-        val email = binding.etEmail.text.toString()
-        val password = binding.etPassword.text.toString()
+        val email = binding.etEmail.text.toString().trim()
+        val password = binding.etPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "필요 항목이 입력되지 않았습니다", Toast.LENGTH_SHORT).show()
@@ -46,7 +46,8 @@ class SignUpActivity : AppCompatActivity() {
                 // 회원가입 실패
                 else {
                     Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
-                    Log.d("SOL_LOG", "signUp: ${it.exception}")
+                    Log.d("SOL_LOG", "${it.exception}")
+                    Log.d("SOL_LOG", "$email / $password")
                 }
             }
     }
