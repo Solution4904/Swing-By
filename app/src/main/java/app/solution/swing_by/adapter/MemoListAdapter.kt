@@ -1,22 +1,17 @@
-package app.solution.swing_by
+package app.solution.swing_by.adapter
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ItemMemoBinding
 import app.solution.swing_by.feature.WriteMemoActivity
 import app.solution.swing_by.item.MemoItem
 
-class MemoListAdapter(
-    val onClick : ((MemoItem) -> Unit)
-) : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {
+class MemoListAdapter(val onClick: ((MemoItem) -> Unit)) : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {
     companion object {
         val differ = object : DiffUtil.ItemCallback<MemoItem>() {
             override fun areItemsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {

@@ -7,13 +7,5 @@ class KakaoConstant {
         const val REST_API_KEY = "11ca0d7f7cc9fcbbae804994189a5bea"
 
         const val BASE_URL = "https://dapi.kakao.com/v2/local/"
-
-        val PERMISSIONS = arrayOf(
-            "Manifest.permission.ACCESS_FINE_LOCATION",
-            "Manifest.permission.ACCESS_COARSE_LOCATION",
-            "Manifest.permission.INTERNET",
-        )
-        const val REQUEST_CODE = 100
-
     }
 }

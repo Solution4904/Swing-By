@@ -1,7 +1,6 @@
 package app.solution.swing_by.api
 
 import android.util.Log
-import app.solution.swing_by.MemoListAdapter
 import app.solution.swing_by.MyApplication
 import app.solution.swing_by.constant.FirebaseConstant
 import com.google.firebase.Firebase
@@ -14,8 +13,7 @@ import com.google.firebase.database.database
 
 class FirebaseAPI {
     interface FirebaseCallback {
-        fun successCallback(result: DataSnapshot)
-        fun successCallback()
+        fun successCallback(result: DataSnapshot? = null)
         fun failureCallback()
     }
 
@@ -70,14 +68,11 @@ class FirebaseAPI {
             FirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Log.d("이메일 로그인", "${it.result.user?.email} / ${it.result.user?.uid}")
-
                         MyApplication.userUid = it.result.user?.uid.toString()
 
                         callback?.successCallback()
                     } else {
-                        it.exception?.stackTrace
-
+                        Log.d(TAG, "signIn: ${it.exception?.stackTrace}")
                         callback?.failureCallback()
                     }
                 }
@@ -90,6 +85,7 @@ class FirebaseAPI {
                     if (it.isSuccessful) {
                         callback?.successCallback()
                     } else {
+                        Log.d(TAG, "signUp: ${it.exception?.stackTrace}")
                         callback?.failureCallback()
                     }
                 }
