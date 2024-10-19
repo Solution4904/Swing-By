@@ -14,7 +14,9 @@ import app.solution.swing_by.databinding.ItemMemoBinding
 import app.solution.swing_by.feature.WriteMemoActivity
 import app.solution.swing_by.item.MemoItem
 
-class MemoListAdapter : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {
+class MemoListAdapter(
+    val onClick : ((MemoItem) -> Unit)
+) : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {
     companion object {
         val differ = object : DiffUtil.ItemCallback<MemoItem>() {
             override fun areItemsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
@@ -46,26 +48,7 @@ class MemoListAdapter : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ
                 }
 
                 root.setOnLongClickListener {
-                    AlertDialog.Builder(it.context).apply {
-                        setTitle("메모를 삭제하시겠습니까?")
-                        setMessage("[${item.location}] ${item.title} \n${item.description}")
-                        setPositiveButton("네") { _, _ ->
-                            FirebaseAPI.deleteMemo(item.uuid.toString(), object : FirebaseAPI.FirebaseCallback {
-                                override fun successCallback() {
-                                    Toast.makeText(it.context, "제거 완료", Toast.LENGTH_SHORT).show()
-                                }
-
-                                override fun failureCallback() {
-                                    Toast.makeText(it.context, "제거 실패", Toast.LENGTH_SHORT).show()
-                                }
-                            })
-                        }
-                        setNegativeButton("아니오") { _, _ ->
-//                            Toast.makeText(it.context, "Negative", Toast.LENGTH_SHORT).show()
-                        }
-                        create()
-                        show()
-                    }
+                    onClick.invoke(item)
 
                     return@setOnLongClickListener true
                 }

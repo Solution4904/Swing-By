@@ -93,53 +93,45 @@ class KakaoAPI {
 
             } else {
                 fusedLocationClient.lastLocation.addOnSuccessListener { result ->
-                    result.let {
-                        // TODO: lastLocation이 없는 경우 NPE으로 강제 종료되는 문제가 있음.
-                        // TODO: 위치 권한을 거절했던, 재설치했건 재요청하는 기능 필요.
-
-                        latitude = result.latitude
-                        longitude = result.longitude
-
-                        Log.d(TAG, "trackingMyLocation: $latitude / $longitude")
-                    }
+                    latitude = result.latitude
+                    longitude = result.longitude
                 }
             }
         }
+    }
 
-        fun serching(activity: Activity, context: Context, keyword: String) {
-            trackingMyLocation(activity, context)
+    fun serching(activity: Activity, context: Context, keyword: String) {
+        trackingMyLocation(activity, context)
 
-            retrofit = Retrofit.Builder()
-                .baseUrl(KakaoConstant.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+        retrofit = Retrofit.Builder()
+            .baseUrl(KakaoConstant.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-            val retrofitService = retrofit.create(KakaoAPIService::class.java)
-            retrofitService.getSerchingResult(query = keyword, x = longitude.toString(), y = latitude.toString())
-                .enqueue(object : Callback<KeywordSerchingResultData> {
-                    override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
+        val retrofitService = retrofit.create(KakaoAPIService::class.java)
+        retrofitService.getSerchingResult(query = keyword, x = longitude.toString(), y = latitude.toString())
+            .enqueue(object : Callback<KeywordSerchingResultData> {
+                override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
 //                Log.d("SOL_LOG", p1.body().toString())
 
-                        val nearbySerchResults = ArrayList<Document>()
-                        for (document in p1.body()!!.documents) {
-                            Log.d("SOL_LOG", "document\n$document")
-                            nearbySerchResults.add(document)
+                    val nearbySerchResults = ArrayList<Document>()
+                    for (document in p1.body()!!.documents) {
+                        Log.d("SOL_LOG", "document\n$document")
+                        nearbySerchResults.add(document)
 
-                            val notificationManager = NotificationManager(context)
-                            notificationManager.showNotification(
-                                keyword,
-                                "${document.place_name} (${document.distance}m)"
-                            )
-                        }
+                        val notificationManager = NotificationManager(context)
+                        notificationManager.showNotification(
+                            keyword,
+                            "${document.place_name} (${document.distance}m)"
+                        )
+                    }
 
 //                Log.d("SOL_LOG", "검색 결과 갯수 : ${nearbySerchResults.count()}")
-                    }
+                }
 
-                    override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
-                        Log.d("SOL_LOG", p1.stackTrace.toString())
-                    }
-
-                })
-        }
+                override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
+                    Log.d("SOL_LOG", p1.stackTrace.toString())
+                }
+            })
     }
 }

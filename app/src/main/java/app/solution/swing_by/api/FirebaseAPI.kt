@@ -4,7 +4,6 @@ import android.util.Log
 import app.solution.swing_by.MemoListAdapter
 import app.solution.swing_by.MyApplication
 import app.solution.swing_by.constant.FirebaseConstant
-import app.solution.swing_by.item.MemoItem
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.database.DataSnapshot
@@ -15,6 +14,7 @@ import com.google.firebase.database.database
 
 class FirebaseAPI {
     interface FirebaseCallback {
+        fun successCallback(result: DataSnapshot)
         fun successCallback()
         fun failureCallback()
     }
@@ -24,28 +24,17 @@ class FirebaseAPI {
         private val FirebaseDatabase = Firebase.database.reference
         private val FirebaseAuth = Firebase.auth
 
-        private lateinit var myAdapter: MemoListAdapter
-
 
         // 메모 리스트 갱신
-        fun refreshMemoList(adapter: MemoListAdapter? = null, callback: FirebaseCallback? = null) {
-            if (adapter != null) {
-                myAdapter = adapter
-            }
-
+        fun refreshMemoList(callback: FirebaseCallback) {
             FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.userUid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val list = snapshot.children.map {
-                            it.getValue(MemoItem::class.java)
-                        }
-                        myAdapter.submitList(list.toMutableList())
-
-                        callback?.successCallback()
+                        callback.successCallback(snapshot)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        callback?.failureCallback()
+                        callback.failureCallback()
                     }
                 })
         }
@@ -68,7 +57,6 @@ class FirebaseAPI {
             FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.userUid).child(memoUUID).removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        refreshMemoList()
                         callback?.successCallback()
                     } else {
                         Log.e(TAG, "registerMemo: ${it.exception?.stackTrace}")
