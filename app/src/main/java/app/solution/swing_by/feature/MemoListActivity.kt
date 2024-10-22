@@ -3,12 +3,16 @@ package app.solution.swing_by.feature
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.adapter.MemoListAdapter
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivityMemoListBinding
 import app.solution.swing_by.item.MemoItem
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 
 
@@ -55,8 +59,10 @@ class MemoListActivity : AppCompatActivity() {
                 }
             }
 
+            override fun successCallback(result: Task<AuthResult>) {}
             override fun failureCallback() {}
         }
+        FirebaseAPI.refreshMemoList(callback)
 
         memoListAdapter = MemoListAdapter {
             AlertDialog.Builder(this)
@@ -64,9 +70,10 @@ class MemoListActivity : AppCompatActivity() {
                 .setMessage("[${it.location}] ${it.title} \n${it.description}")
                 .setPositiveButton("네") { _, _ ->
                     FirebaseAPI.deleteMemo(it.uuid.toString(), callback)
+                    Toast.makeText(this@MemoListActivity, "메모를 삭제했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton("아니오") { _, _ ->
-//                            Toast.makeText(it.context, "Negative", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MemoListActivity, "작업을 취소했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 .create()
                 .show()
@@ -76,7 +83,5 @@ class MemoListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
             adapter = memoListAdapter
         }
-
-        FirebaseAPI.refreshMemoList(callback)
     }
 }

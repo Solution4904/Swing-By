@@ -5,6 +5,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivitySignupBinding
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 
 class SignUpActivity : AppCompatActivity() {
@@ -43,6 +45,7 @@ class SignUpActivity : AppCompatActivity() {
                 finish()
             }
 
+            override fun successCallback(result: Task<AuthResult>) {}
             override fun failureCallback() {}
         })
     }
