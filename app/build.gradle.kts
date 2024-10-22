@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.retrofit2.converter.gson)
 
+    /* TedPermission */
+    implementation("io.github.ParkSangGwon:tedpermission-normal:3.4.2")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
