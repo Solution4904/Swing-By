@@ -54,7 +54,7 @@
 
         <!--App Widget-->
         <receiver
-            android:name=".AppWidgetProvider"
+            android:name=".MyAppWidgetProvider"
             android:exported="true">
 
             <intent-filter>

@@ -1,16 +1,15 @@
 package app.solution.swing_by.feature
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivitySignupBinding
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.google.firebase.database.DataSnapshot
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +20,7 @@ class SignUpActivity : AppCompatActivity() {
         setButtons()
     }
 
+    // # 버튼 이벤트 추가
     private fun setButtons() {
         with(binding) {
             btnConfirm.setOnClickListener { signUp() }
@@ -28,6 +28,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    // # 이메일 가입
     private fun signUp() {
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
@@ -38,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         FirebaseAPI.signUp(email, password, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback() {
+            override fun successCallback(result: DataSnapshot?) {
                 finish()
             }
 

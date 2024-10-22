@@ -23,21 +23,19 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class KakaoAPI {
     interface KakaoCallBack {
         fun successCallback()
         fun failureCallback()
     }
 
+
     companion object {
         private const val TAG = "SOL_LOG"
         private var latitude: Double = 0.0
         private var longitude: Double = 0.0
         private lateinit var retrofit: Retrofit
-
-
-        val KAKAOMAP_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-        const val KAKAOMAP_REQUEST_CODE = 100
 
 
         // 로그인
@@ -51,6 +49,7 @@ class KakaoAPI {
                     UserApiClient.instance.accessTokenInfo { tokenInfo, _ ->
                         UserApiClient.instance.me { _, _ ->
                             MyApplication.userUid = tokenInfo?.id.toString()
+
                             callBack?.successCallback()
                         }
                     }
@@ -83,26 +82,10 @@ class KakaoAPI {
                 UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
             }
         }
-
-        private fun trackingMyLocation(activity: Activity, context: Context) {
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            ) {
-
-            } else {
-                fusedLocationClient.lastLocation.addOnSuccessListener { result ->
-                    latitude = result.latitude
-                    longitude = result.longitude
-                }
-            }
-        }
     }
 
-    fun serching(activity: Activity, context: Context, keyword: String) {
-        trackingMyLocation(activity, context)
-
+    // # 주변 키워드 검색
+    fun searching(context: Context, keyword: String) {
         retrofit = Retrofit.Builder()
             .baseUrl(KakaoConstant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -112,8 +95,6 @@ class KakaoAPI {
         retrofitService.getSerchingResult(query = keyword, x = longitude.toString(), y = latitude.toString())
             .enqueue(object : Callback<KeywordSerchingResultData> {
                 override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
-//                Log.d("SOL_LOG", p1.body().toString())
-
                     val nearbySerchResults = ArrayList<Document>()
                     for (document in p1.body()!!.documents) {
                         Log.d("SOL_LOG", "document\n$document")
@@ -125,8 +106,6 @@ class KakaoAPI {
                             "${document.place_name} (${document.distance}m)"
                         )
                     }
-
-//                Log.d("SOL_LOG", "검색 결과 갯수 : ${nearbySerchResults.count()}")
                 }
 
                 override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {

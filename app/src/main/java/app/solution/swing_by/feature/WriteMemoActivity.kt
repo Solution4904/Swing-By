@@ -6,11 +6,13 @@ import androidx.core.view.get
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
+import com.google.firebase.database.DataSnapshot
 import java.util.UUID
 
 class WriteMemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWriteMemoBinding
     private lateinit var memoUUID: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +24,15 @@ class WriteMemoActivity : AppCompatActivity() {
         getPreviousData()
     }
 
+    // # 버튼 이벤트 추가
+    private fun setButtons() {
+        with(binding) {
+            btnConfirm.setOnClickListener { registerMemo() }
+            btnCancel.setOnClickListener { finish() }
+        }
+    }
+
+    // # 메모 수정 진입 시 데이터 세팅
     private fun getPreviousData() {
         memoUUID = intent.getStringExtra(FirebaseConstant.DB_MEMO_UUID) ?: UUID.randomUUID().toString()
 
@@ -36,13 +47,7 @@ class WriteMemoActivity : AppCompatActivity() {
         }
     }
 
-    private fun setButtons() {
-        with(binding) {
-            btnConfirm.setOnClickListener { registerMemo() }
-            btnCancel.setOnClickListener { finish() }
-        }
-    }
-
+    // # 메모 등록
     private fun registerMemo() {
         val memoModel = mutableMapOf<String, Any>(
             FirebaseConstant.DB_MEMO_UUID to memoUUID,
@@ -53,14 +58,11 @@ class WriteMemoActivity : AppCompatActivity() {
         )
 
         FirebaseAPI.registerMemo(memoUUID, memoModel, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback() {
-//                Toast.makeText(this@WriteMemoActivity, "등록이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            override fun successCallback(result: DataSnapshot?) {
                 finish()
             }
 
-            override fun failureCallback() {
-//                Toast.makeText(this@WriteMemoActivity, "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-            }
+            override fun failureCallback() {}
         })
     }
 }
