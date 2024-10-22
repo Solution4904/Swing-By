@@ -7,14 +7,22 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import app.solution.swing_by.MyApplication
+import app.solution.swing_by.api.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.databinding.ActivityAuthBinding
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import com.kakao.sdk.user.model.AccessTokenInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class AuthActivity : AppCompatActivity() {
@@ -94,12 +102,21 @@ class AuthActivity : AppCompatActivity() {
         }
 
         FirebaseAPI.signIn(email, password, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback(result: DataSnapshot?) {
-                Intent(this@AuthActivity, MemoListActivity::class.java).apply {
-                    startActivity(this)
+            override fun successCallback(result: Task<AuthResult>) {
+                val currentUser = result.result.user
+
+                currentUser?.let { user ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, user.uid)
+                    }.invokeOnCompletion {
+                        Intent(this@AuthActivity, MemoListActivity::class.java).apply {
+                            startActivity(this)
+                        }
+                    }
                 }
             }
 
+            override fun successCallback(result: DataSnapshot?) {}
             override fun failureCallback() {}
         })
     }
@@ -107,12 +124,17 @@ class AuthActivity : AppCompatActivity() {
     // # 카카오 계정 간편 로그인
     private fun kakaoSignIn() {
         KakaoAPI.signIn(this, object : KakaoAPI.KakaoCallBack {
-            override fun successCallback() {
-                Intent(this@AuthActivity, MemoListActivity::class.java).apply {
-                    startActivity(this)
+            override fun successCallback(accessTokenInfo: AccessTokenInfo?) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, accessTokenInfo?.id.toString())
+                }.invokeOnCompletion {
+                    Intent(this@AuthActivity, MemoListActivity::class.java).apply {
+                        startActivity(this)
+                    }
                 }
             }
 
+            override fun successCallback() {}
             override fun failureCallback() {}
         })
     }

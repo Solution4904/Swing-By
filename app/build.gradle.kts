@@ -71,6 +71,9 @@ dependencies {
     /* TedPermission */
     implementation("io.github.ParkSangGwon:tedpermission-normal:3.4.2")
 
+    /* DataStore */
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

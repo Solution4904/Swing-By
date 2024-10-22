@@ -6,6 +6,8 @@ import androidx.core.view.get
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import java.util.UUID
 
@@ -62,6 +64,7 @@ class WriteMemoActivity : AppCompatActivity() {
                 finish()
             }
 
+            override fun successCallback(result: Task<AuthResult>) {}
             override fun failureCallback() {}
         })
     }

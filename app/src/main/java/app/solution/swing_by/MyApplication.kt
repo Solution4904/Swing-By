@@ -7,14 +7,22 @@ import com.kakao.vectormap.KakaoMapSdk
 
 
 class MyApplication : Application() {
+    private lateinit var localDataManager: LocalDataManager
+
     companion object {
-        var userUid = ""
+        private lateinit var myApplication: MyApplication
+        fun getInstance(): MyApplication = myApplication
     }
 
     override fun onCreate() {
         super.onCreate()
 
+        myApplication = this
+        localDataManager = LocalDataManager(this)
+
         KakaoMapSdk.init(this, KakaoConstant.NATIVE_APP_KEY)
         KakaoSdk.init(this, KakaoConstant.NATIVE_APP_KEY)
     }
+
+    fun getLocalDataManager(): LocalDataManager = localDataManager
 }

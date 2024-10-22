@@ -1,22 +1,17 @@
 package app.solution.swing_by.api
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import app.solution.swing_by.Document
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
-import app.solution.swing_by.MyApplication
 import app.solution.swing_by.NotificationManager
 import app.solution.swing_by.constant.KakaoConstant
-import com.google.android.gms.location.LocationServices
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.model.AccessTokenInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class KakaoAPI {
     interface KakaoCallBack {
         fun successCallback()
+        fun successCallback(accessTokenInfo: AccessTokenInfo?)
         fun failureCallback()
     }
 
@@ -48,9 +44,7 @@ class KakaoAPI {
                 } else if (token != null) {
                     UserApiClient.instance.accessTokenInfo { tokenInfo, _ ->
                         UserApiClient.instance.me { _, _ ->
-                            MyApplication.userUid = tokenInfo?.id.toString()
-
-                            callBack?.successCallback()
+                            callBack?.successCallback(tokenInfo)
                         }
                     }
                 }
@@ -97,7 +91,7 @@ class KakaoAPI {
                 override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
                     val nearbySerchResults = ArrayList<Document>()
                     for (document in p1.body()!!.documents) {
-                        Log.d("SOL_LOG", "document\n$document")
+                        Log.d(TAG, "document\n$document")
                         nearbySerchResults.add(document)
 
                         val notificationManager = NotificationManager(context)
@@ -109,7 +103,7 @@ class KakaoAPI {
                 }
 
                 override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
-                    Log.d("SOL_LOG", p1.stackTrace.toString())
+                    Log.d(TAG, p1.stackTrace.toString())
                 }
             })
     }
