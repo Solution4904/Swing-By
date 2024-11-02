@@ -29,9 +29,16 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.animation.Interpolation
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelLayer
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelTransition
+import com.kakao.vectormap.label.Transition
+import com.kakao.vectormap.label.animation.ScaleAlphaAnimation
+import com.kakao.vectormap.label.animation.ScaleAlphaAnimations
 import com.kakao.vectormap.mapwidget.InfoWindowLayer
 import com.kakao.vectormap.mapwidget.InfoWindowOptions
 import com.kakao.vectormap.mapwidget.component.GuiImage
@@ -129,8 +136,9 @@ class MapActivity : AppCompatActivity() {
 //                        Log.d("SOL_LOG", "getCurrentLocation: ${result.longitude} / ${result.latitude}")
                         currentLatLng = LatLng.from(result.latitude, result.longitude)
 
-                        moveToPosition()
+//                        moveToPosition()
                         searching()
+                        showSharingTransformLabel(currentLatLng)
                     }
                 }
         }
@@ -238,5 +246,70 @@ class MapActivity : AppCompatActivity() {
         options.setTail(GuiImage(R.drawable.window_tail, false))
         options.setVisible(true)
         return options
+    }
+
+    private fun showSharingTransformLabel(latLng: LatLng) {
+        val pos = LatLng.from(latLng.latitude, latLng.longitude)
+
+        // 1. 애니메이션용 라벨 생성 - 둥근 이미지를 넣어 스타일 생성
+        /*val waveAnimationLabel = labelLayer!!.addLabel(
+            LabelOptions.from(pos).setRank(100)
+                .setStyles(
+                    LabelStyle.from(R.drawable.circle).setAnchorPoint(0.5f, 0.5f)
+                        .setIconTransition(LabelTransition.from(Transition.None, Transition.None))
+                )
+        )*/
+
+        // 2. 현위치용 라벨 생성
+        val currentPosLabel = labelLayer!!.addLabel(
+            LabelOptions.from(pos).setRank(101)
+                .setStyles(
+                    LabelStyle.from(R.drawable.current_location)
+                        .setAnchorPoint(0.5f, 0.5f)
+                        .setIconTransition(LabelTransition.from(Transition.None, Transition.None))
+                )
+        )
+
+        // 3. 현위치용 라벨의 transform 을 애니메이션용 라벨과 공유하도록 연결
+//        currentPosLabel.addShareTransform(waveAnimationLabel)
+
+        // 4. ScaleAlphaAnimation 설정 - (0.0f ~ 1.0f)
+        /*val waveAnimation = ScaleAlphaAnimations.from()
+        waveAnimation.setInitAlpha(0.0f).setInitScale(0.1f, 0.1f)
+        waveAnimation.setResetToInitialState(false)
+        waveAnimation.setHideLabelAtStop(true)
+        waveAnimation.setRemoveLabelAtStop(true)
+        waveAnimation.addScaleAlphaAnimation(
+            ScaleAlphaAnimation.from(1.0f, 1.0f, 1.0f)
+                .setInterpolation(Interpolation.CubicOut).setDuration(900)
+        )
+        waveAnimation.addScaleAlphaAnimation(
+            ScaleAlphaAnimation.from(0.1f, 0.1f, 0.0f)
+                .setInterpolation(Interpolation.CubicOut).setDuration(900)
+        )
+        waveAnimation.addScaleAlphaAnimation(
+            ScaleAlphaAnimation.from(1.0f, 1.0f, 1.0f)
+                .setInterpolation(Interpolation.CubicOut).setDuration(900)
+        )
+        waveAnimation.addScaleAlphaAnimation(
+            ScaleAlphaAnimation.from(0.1f, 0.1f, 0.0f)
+                .setInterpolation(Interpolation.CubicOut).setDuration(900)
+        )
+        waveAnimation.addScaleAlphaAnimation(
+            ScaleAlphaAnimation.from(1.0f, 1.0f, 1.0f)
+                .setInterpolation(Interpolation.CubicOut).setDuration(900)
+        )*/
+
+        // 5. 설정한 ScaleAlphaAnimation 으로 LabelAnimator 를 생성하고, 라벨 추가.
+        /*val waveAnimator = kakaoMap.labelManager!!.addAnimator(waveAnimation)
+        waveAnimator.addLabels(waveAnimationLabel)*/
+
+        // 6. LabelAnimator 시작
+//        waveAnimator.start()
+
+        kakaoMap.moveCamera(
+            CameraUpdateFactory.newCenterPosition(pos, 17),
+            CameraAnimation.from(500, true, true)
+        )
     }
 }
