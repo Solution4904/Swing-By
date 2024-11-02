@@ -22,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class KakaoAPI {
     interface KakaoCallBack {
         fun successCallback()
+        fun successCallback(array: Array<Document>)
         fun successCallback(accessTokenInfo: AccessTokenInfo?)
         fun failureCallback()
     }
@@ -29,9 +30,12 @@ class KakaoAPI {
 
     companion object {
         private const val TAG = "SOL_LOG"
-        private var latitude: Double = 0.0
-        private var longitude: Double = 0.0
-        private lateinit var retrofit: Retrofit
+        private val retrofit: Retrofit by lazy {
+            Retrofit.Builder()
+                .baseUrl(KakaoConstant.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
 
 
         // 로그인
@@ -76,35 +80,35 @@ class KakaoAPI {
                 UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
             }
         }
-    }
 
-    // # 주변 키워드 검색
-    fun searching(context: Context, keyword: String) {
-        retrofit = Retrofit.Builder()
-            .baseUrl(KakaoConstant.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        // # 주변 키워드 검색
+        fun searching(context: Context, keyword: String, longitude: Double, latitude: Double, callback : KakaoCallBack) {
+            val retrofitService = retrofit.create(KakaoAPIService::class.java)
+            retrofitService.getSerchingResult(query = keyword, x = longitude.toString(), y = latitude.toString())
+                .enqueue(object : Callback<KeywordSerchingResultData> {
+                    override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
+                        val nearbySerchResults = ArrayList<Document>()
+                        for (document in p1.body()!!.documents) {
+                            Log.d(TAG, "document\n$document")
+                            nearbySerchResults.add(document)
 
-        val retrofitService = retrofit.create(KakaoAPIService::class.java)
-        retrofitService.getSerchingResult(query = keyword, x = longitude.toString(), y = latitude.toString())
-            .enqueue(object : Callback<KeywordSerchingResultData> {
-                override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
-                    val nearbySerchResults = ArrayList<Document>()
-                    for (document in p1.body()!!.documents) {
-                        Log.d(TAG, "document\n$document")
-                        nearbySerchResults.add(document)
+//                            val notificationManager = NotificationManager(context)
+//                            notificationManager.showNotification(
+//                                keyword,
+//                                "${document.place_name} (${document.distance}m)"
+//                            )
+                        }
 
-                        val notificationManager = NotificationManager(context)
-                        notificationManager.showNotification(
-                            keyword,
-                            "${document.place_name} (${document.distance}m)"
-                        )
+                        callback.successCallback(nearbySerchResults.toTypedArray())
                     }
-                }
 
-                override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
-                    Log.d(TAG, p1.stackTrace.toString())
-                }
-            })
+                    override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
+                        Log.d(TAG, p1.stackTrace.toString())
+
+                        callback.failureCallback()
+                    }
+                })
+        }
     }
+
 }

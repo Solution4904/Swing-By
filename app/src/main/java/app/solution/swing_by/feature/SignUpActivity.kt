@@ -41,11 +41,11 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         FirebaseAPI.signUp(email, password, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback(result: DataSnapshot?) {
+            override fun successCallback(results: DataSnapshot?) {
                 finish()
             }
 
-            override fun successCallback(result: Task<AuthResult>) {}
+            override fun successCallback(results: Task<AuthResult>) {}
             override fun failureCallback() {}
         })
     }

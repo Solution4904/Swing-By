@@ -20,4 +20,10 @@ data class Document(
 
     @SerializedName("distance")
     val distance: String,
+
+    @SerializedName("x")
+    val x: String,   // longitude
+
+    @SerializedName("y")
+    val y: String,   // latitude
 )

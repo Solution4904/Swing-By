@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 
 class FirebaseAPI {
     interface FirebaseCallback {
-        fun successCallback(result: DataSnapshot? = null)
-        fun successCallback(result: Task<AuthResult>)
+        fun successCallback(results: DataSnapshot? = null)
+        fun successCallback(results: Task<AuthResult>)
         fun failureCallback()
     }
 
@@ -40,17 +40,19 @@ class FirebaseAPI {
             }
         }
 
-        // 메모 리스트 갱신
-        fun refreshMemoList(callback: FirebaseCallback? = null) {
+        // 메모 리스트 불러오기
+        fun getMemoList(callback: FirebaseCallback? = null) {
             validation { uid ->
                 FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(uid)
-                    .addValueEventListener(object:ValueEventListener{
+                    .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             callback?.successCallback(snapshot)
+                            Log.d(TAG, "onDataChange: ${snapshot}")
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             callback?.failureCallback()
+                            Log.e(TAG, "onCancelled: ${error.message}", )
                         }
                     })
 //                    .addListenerForSingleValueEvent(object : ValueEventListener {

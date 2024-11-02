@@ -3,7 +3,6 @@ package app.solution.swing_by.feature
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,8 +49,8 @@ class MemoListActivity : AppCompatActivity() {
     // # 메모 리스트 불러오기
     private fun setMemoList() {
         val callback = object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback(result: DataSnapshot?) {
-                result?.let {
+            override fun successCallback(results: DataSnapshot?) {
+                results?.let {
                     val elements = it.children.map { snapshot ->
                         snapshot.getValue(MemoItem::class.java)
                     }
@@ -59,10 +58,10 @@ class MemoListActivity : AppCompatActivity() {
                 }
             }
 
-            override fun successCallback(result: Task<AuthResult>) {}
+            override fun successCallback(results: Task<AuthResult>) {}
             override fun failureCallback() {}
         }
-        FirebaseAPI.refreshMemoList(callback)
+        FirebaseAPI.getMemoList(callback)
 
         memoListAdapter = MemoListAdapter {
             AlertDialog.Builder(this)
