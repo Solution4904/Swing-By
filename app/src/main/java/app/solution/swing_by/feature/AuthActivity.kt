@@ -1,10 +1,7 @@
 package app.solution.swing_by.feature
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.MyApplication
@@ -12,13 +9,9 @@ import app.solution.swing_by.api.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.databinding.ActivityAuthBinding
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
 import com.kakao.sdk.user.model.AccessTokenInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,8 +29,8 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setButtons()
-        requestPermission()
-        getCurrentLocation()
+        /*requestPermission()
+        getCurrentLocation()*/
     }
 
     // # 버튼 이벤트 추가
@@ -46,11 +39,15 @@ class AuthActivity : AppCompatActivity() {
             btnKakaoAccountLinking.setOnClickListener { kakaoSignIn() }
             btnSignup.setOnClickListener { signUp() }
             btnSignin.setOnClickListener { emailSignIn() }
-            btnTempMap.setOnClickListener { }
+            btnTempMap.setOnClickListener {
+                Intent(this@AuthActivity, MapActivity::class.java).apply {
+                    startActivity(this)
+                }
+            }
         }
     }
 
-    // # 현재 위치 정보 불러오기
+    /*// # 현재 위치 정보 불러오기
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {
         val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -82,7 +79,7 @@ class AuthActivity : AppCompatActivity() {
                 Manifest.permission.INTERNET
             ).check()
         }
-    }
+    }*/
 
     // # 이메일 계정 가입
     private fun signUp() {
@@ -102,8 +99,8 @@ class AuthActivity : AppCompatActivity() {
         }
 
         FirebaseAPI.signIn(email, password, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback(result: Task<AuthResult>) {
-                val currentUser = result.result.user
+            override fun successCallback(results: Task<AuthResult>) {
+                val currentUser = results.result.user
 
                 currentUser?.let { user ->
                     CoroutineScope(Dispatchers.Main).launch {
@@ -116,7 +113,7 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
 
-            override fun successCallback(result: DataSnapshot?) {}
+            override fun successCallback(results: DataSnapshot?) {}
             override fun failureCallback() {}
         })
     }

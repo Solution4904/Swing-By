@@ -13,7 +13,7 @@ interface KakaoAPIService {
         @Header("Authorization") authorization: String = "KakaoAK ${KakaoConstant.REST_API_KEY}",
         @Query("sort") sort: String = "distance",
         @Query("radius") radius: Int = 5000,
-        @Query("size") size: Int = 5,
+        @Query("size") size: Int = 3,
         @Query("x") x: String,
         @Query("y") y: String,
         @Query("query") query: String,

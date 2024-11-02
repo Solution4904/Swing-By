@@ -60,7 +60,8 @@ dependencies {
 
     /* Kakao API */
     implementation("com.google.android.gms:play-services-location:21.3.0")  // Map
-    implementation("com.kakao.maps.open:android:2.12.7")                    // Map
+    implementation("com.kakao.maps.open:android:2.12.8")                    // Map
+
     implementation("com.kakao.sdk:v2-user:2.20.6")                          // Login
 
     /* Retrofit */
