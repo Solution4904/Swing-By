@@ -6,12 +6,14 @@ import app.solution.swing_by.Document
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
 import app.solution.swing_by.NotificationManager
+import app.solution.swing_by.constant.KakaoCategoryGroupCode
 import app.solution.swing_by.constant.KakaoConstant
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
+import com.kakao.vectormap.LatLng
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,9 +84,9 @@ class KakaoAPI {
         }
 
         // # 주변 키워드 검색
-        fun searching(context: Context, keyword: String, longitude: Double, latitude: Double, callback : KakaoCallBack) {
+        fun searching(context: Context, keyword: String, latLng: LatLng, categoryGroupCode: String, callback: KakaoCallBack) {
             val retrofitService = retrofit.create(KakaoAPIService::class.java)
-            retrofitService.getSerchingResult(query = keyword, x = longitude.toString(), y = latitude.toString())
+            retrofitService.getSerchingResult(query = keyword, x = latLng.longitude.toString(), y = latLng.latitude.toString(), categoryGroupCode = categoryGroupCode.toString())
                 .enqueue(object : Callback<KeywordSerchingResultData> {
                     override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
                         val nearbySerchResults = ArrayList<Document>()

@@ -17,5 +17,6 @@ interface KakaoAPIService {
         @Query("x") x: String,
         @Query("y") y: String,
         @Query("query") query: String,
+        @Query("category_group_code") categoryGroupCode: String? = null,
     ): Call<KeywordSerchingResultData>
 }

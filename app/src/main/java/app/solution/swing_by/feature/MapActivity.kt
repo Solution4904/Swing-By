@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,7 @@ import app.solution.swing_by.item.MemoItem
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.gun0912.tedpermission.PermissionListener
@@ -29,7 +31,6 @@ import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
-import com.kakao.vectormap.animation.Interpolation
 import com.kakao.vectormap.camera.CameraAnimation
 import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.kakao.vectormap.label.LabelLayer
@@ -37,8 +38,6 @@ import com.kakao.vectormap.label.LabelOptions
 import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelTransition
 import com.kakao.vectormap.label.Transition
-import com.kakao.vectormap.label.animation.ScaleAlphaAnimation
-import com.kakao.vectormap.label.animation.ScaleAlphaAnimations
 import com.kakao.vectormap.mapwidget.InfoWindowLayer
 import com.kakao.vectormap.mapwidget.InfoWindowOptions
 import com.kakao.vectormap.mapwidget.component.GuiImage
@@ -53,7 +52,7 @@ class MapActivity : AppCompatActivity() {
     private lateinit var currentLatLng: LatLng
     private var labelLayer: LabelLayer? = null
     private var infoWindowLayer: InfoWindowLayer? = null
-    private val labelDatas: MutableMap<String, LatLng> = mutableMapOf()
+    private val labelDatas: MutableMap<String, LabelData> = mutableMapOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +60,8 @@ class MapActivity : AppCompatActivity() {
 
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        BottomSheetBehavior.from(binding.layoutBottomsheet.root).state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.mapview.start(object : MapLifeCycleCallback() {
             override fun onMapDestroy() {
@@ -144,11 +145,11 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    private fun moveToPosition() {
+    /*private fun moveToPosition() {
         val cameraUpdate = CameraUpdateFactory.newCenterPosition(currentLatLng)
 
         kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
-    }
+    }*/
 
     private fun searching() {
         FirebaseAPI.getMemoList(object : FirebaseAPI.FirebaseCallback {
@@ -157,14 +158,15 @@ class MapActivity : AppCompatActivity() {
                     result.children.map { snapshot ->
                         val memoItem = snapshot.getValue(MemoItem::class.java)
 
-                        KakaoAPI.searching(this@MapActivity, "${memoItem?.location}", currentLatLng.longitude, currentLatLng.latitude, object : KakaoAPI.KakaoCallBack {
+                        KakaoAPI.searching(this@MapActivity, "${memoItem?.location}", currentLatLng, memoItem?.categoryCode!!, object : KakaoAPI.KakaoCallBack {
                             override fun successCallback(array: Array<Document>) {
                                 array.forEach { index ->
 //                                    createLabel(index.place_name, LatLng.from(index.y.toDouble(), index.x.toDouble()))
                                     infoWindowLayer?.addInfoWindow(
-                                        getComplexLayout(index, memoItem!!)
+                                        getComplexLayout(index, memoItem)
                                     )
-                                    labelDatas[index.place_name] = LatLng.from(index.y.toDouble(), index.x.toDouble())
+//                                    labelDatas[index.place_name] = LatLng.from(index.y.toDouble(), index.x.toDouble())
+                                    labelDatas[index.place_name] = LabelData(index.place_name, memoItem.description!!, LatLng.from(index.y.toDouble(), index.x.toDouble()))
                                 }
                             }
 
@@ -182,28 +184,34 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun onInfoWindowClicked(labelId: String?) {
+        if (labelDatas.containsKey(labelId)) {
+
+            showDetailToLocation(labelId!!)
+        }
+
         // TODO: 설치되어 있어도 packageManager.queryIntentActivities가 null?로 잡혀서 마켓 연결하는 API 수준? 문제가 있음
         // TODO: https://apis.map.kakao.com/android_v2/docs/api-guide/urlscheme/
-        if (labelDatas.containsKey(labelId)) {
-            val navigationScheme = "kakaomap://route?sp=${currentLatLng.latitude},${currentLatLng.longitude}&ep=${labelDatas[labelId]!!.latitude},${labelDatas[labelId]!!.longitude}&by=FOOT"
+    }
 
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(navigationScheme)).apply {
-                addCategory(Intent.CATEGORY_BROWSABLE)
-            }
-            val list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+    private fun navigation(labelData: LabelData) {
+        val navigationScheme = "kakaomap://route?sp=${currentLatLng.latitude},${currentLatLng.longitude}&ep=${labelData.latLng.latitude},${labelData.latLng.longitude}&by=FOOT"
 
-            // 설치되어 있지 않다면
-            if (list.isEmpty()) {
-                // 마켓으로 이동
-                this.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(KakaoConstant.MARKET_SCHEME))
-                )
-            } else {
-                // URL 스킴 으로 카카오맵 검색
-                this.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse(navigationScheme))
-                )
-            }
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(navigationScheme)).apply {
+            addCategory(Intent.CATEGORY_BROWSABLE)
+        }
+        val list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+
+        // 설치되어 있지 않다면
+        if (list.isEmpty()) {
+            // 마켓으로 이동
+            this.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(KakaoConstant.MARKET_SCHEME))
+            )
+        } else {
+            // URL 스킴 으로 카카오맵 검색
+            this.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(navigationScheme))
+            )
         }
     }
 
@@ -229,13 +237,13 @@ class MapActivity : AppCompatActivity() {
 //        upperLayout.addView(GuiImage(R.drawable.choonsik, false))
 
         // lower layout
-        val text2 = GuiText(memoItem.title)
-        text2.setTextSize(20)
-        text2.paddingTop = 8
-        text2.setTextColor(Color.parseColor("#003F63"))
+//        val text2 = GuiText(memoItem.title)
+//        text2.setTextSize(20)
+//        text2.paddingTop = 8
+//        text2.setTextColor(Color.parseColor("#003F63"))
 
         body.addView(upperLayout)
-        body.addView(text2)
+//        body.addView(text2)
 
         val options = InfoWindowOptions.from(
             index.place_name,
@@ -312,4 +320,29 @@ class MapActivity : AppCompatActivity() {
             CameraAnimation.from(500, true, true)
         )
     }
+
+    private fun showDetailToLocation(labelId: String) {
+        with(binding.layoutBottomsheet) {
+            tvLocationName.text = labelDatas[labelId]!!.locationName
+            tvMemoDescription.text = labelDatas[labelId]!!.description
+
+            val viewport: Rect = kakaoMap.viewport
+            val x = viewport.width()
+            val y = viewport.height()
+
+            BottomSheetBehavior.from(root).peekHeight = y / 2
+            BottomSheetBehavior.from(root).state = BottomSheetBehavior.STATE_COLLAPSED
+            setVisible(true)
+
+            btnNavi.setOnClickListener {
+                navigation(labelDatas[labelId]!!)
+            }
+        }
+    }
 }
+
+data class LabelData(
+    val locationName: String,
+    val description: String,
+    val latLng: LatLng,
+)
