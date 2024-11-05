@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="6dp"
                 android:layout_marginVertical="8dp"
-                android:background="@color/design_default_color_primary" />
+                android:background="@color/personalGray" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -117,7 +117,14 @@
                         android:text="기타" />
 
                 </com.google.android.material.chip.ChipGroup>
+
             </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="장소 검색 시 카테고리에 따라 필터링된 결과 값을 받아옵니다. \n만약 장소 명이 정확하더라도 카테고리가 다르다면 검색되지 않습니다. \n정확한 카테고리를 모를 경우 선택하지 않으면 됩니다."
+                    android:layout_marginVertical="16dp"
+                    android:layout_height="wrap_content"/>
 
             <TextView
                 android:layout_width="match_parent"
