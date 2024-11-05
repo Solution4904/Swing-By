@@ -1,7 +1,6 @@
 package app.solution.swing_by.feature
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import app.solution.swing_by.api.FirebaseAPI
@@ -33,10 +32,6 @@ class WriteMemoActivity : AppCompatActivity() {
         with(binding) {
             btnConfirm.setOnClickListener { registerMemo() }
             btnCancel.setOnClickListener { finish() }
-
-            chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
-                Log.d("SOL_LOG", "chipGroup.checkedChipId: $checkedIds")
-            }
         }
     }
 

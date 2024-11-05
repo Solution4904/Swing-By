@@ -134,22 +134,14 @@ class MapActivity : AppCompatActivity() {
             getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                 .addOnSuccessListener { result ->
                     result?.let {
-//                        Log.d("SOL_LOG", "getCurrentLocation: ${result.longitude} / ${result.latitude}")
                         currentLatLng = LatLng.from(result.latitude, result.longitude)
 
-//                        moveToPosition()
                         searching()
                         showSharingTransformLabel(currentLatLng)
                     }
                 }
         }
     }
-
-    /*private fun moveToPosition() {
-        val cameraUpdate = CameraUpdateFactory.newCenterPosition(currentLatLng)
-
-        kakaoMap.moveCamera(cameraUpdate, CameraAnimation.from(500, true, true))
-    }*/
 
     private fun searching() {
         FirebaseAPI.getMemoList(object : FirebaseAPI.FirebaseCallback {
@@ -158,14 +150,12 @@ class MapActivity : AppCompatActivity() {
                     result.children.map { snapshot ->
                         val memoItem = snapshot.getValue(MemoItem::class.java)
 
-                        KakaoAPI.searching(this@MapActivity, "${memoItem?.location}", currentLatLng, memoItem?.categoryCode!!, object : KakaoAPI.KakaoCallBack {
+                        KakaoAPI.searching("${memoItem?.location}", currentLatLng, memoItem?.categoryCode!!, object : KakaoAPI.KakaoCallBack {
                             override fun successCallback(array: Array<Document>) {
                                 array.forEach { index ->
-//                                    createLabel(index.place_name, LatLng.from(index.y.toDouble(), index.x.toDouble()))
                                     infoWindowLayer?.addInfoWindow(
                                         getComplexLayout(index, memoItem)
                                     )
-//                                    labelDatas[index.place_name] = LatLng.from(index.y.toDouble(), index.x.toDouble())
                                     labelDatas[index.place_name] = LabelData(index.place_name, memoItem.description!!, LatLng.from(index.y.toDouble(), index.x.toDouble()))
                                 }
                             }
@@ -229,21 +219,11 @@ class MapActivity : AppCompatActivity() {
             textColor = Color.parseColor("#013ADF")
         }
         text.setTextSize(25)
-//        text.paddingRight = 13
-
 
         val upperLayout = GuiLayout(Orientation.Horizontal)
         upperLayout.addView(text)
-//        upperLayout.addView(GuiImage(R.drawable.choonsik, false))
-
-        // lower layout
-//        val text2 = GuiText(memoItem.title)
-//        text2.setTextSize(20)
-//        text2.paddingTop = 8
-//        text2.setTextColor(Color.parseColor("#003F63"))
 
         body.addView(upperLayout)
-//        body.addView(text2)
 
         val options = InfoWindowOptions.from(
             index.place_name,
@@ -259,17 +239,7 @@ class MapActivity : AppCompatActivity() {
     private fun showSharingTransformLabel(latLng: LatLng) {
         val pos = LatLng.from(latLng.latitude, latLng.longitude)
 
-        // 1. 애니메이션용 라벨 생성 - 둥근 이미지를 넣어 스타일 생성
-        /*val waveAnimationLabel = labelLayer!!.addLabel(
-            LabelOptions.from(pos).setRank(100)
-                .setStyles(
-                    LabelStyle.from(R.drawable.circle).setAnchorPoint(0.5f, 0.5f)
-                        .setIconTransition(LabelTransition.from(Transition.None, Transition.None))
-                )
-        )*/
-
-        // 2. 현위치용 라벨 생성
-        val currentPosLabel = labelLayer!!.addLabel(
+        labelLayer!!.addLabel(
             LabelOptions.from(pos).setRank(101)
                 .setStyles(
                     LabelStyle.from(R.drawable.current_location)
@@ -277,43 +247,6 @@ class MapActivity : AppCompatActivity() {
                         .setIconTransition(LabelTransition.from(Transition.None, Transition.None))
                 )
         )
-
-        // 3. 현위치용 라벨의 transform 을 애니메이션용 라벨과 공유하도록 연결
-//        currentPosLabel.addShareTransform(waveAnimationLabel)
-
-        // 4. ScaleAlphaAnimation 설정 - (0.0f ~ 1.0f)
-        /*val waveAnimation = ScaleAlphaAnimations.from()
-        waveAnimation.setInitAlpha(0.0f).setInitScale(0.1f, 0.1f)
-        waveAnimation.setResetToInitialState(false)
-        waveAnimation.setHideLabelAtStop(true)
-        waveAnimation.setRemoveLabelAtStop(true)
-        waveAnimation.addScaleAlphaAnimation(
-            ScaleAlphaAnimation.from(1.0f, 1.0f, 1.0f)
-                .setInterpolation(Interpolation.CubicOut).setDuration(900)
-        )
-        waveAnimation.addScaleAlphaAnimation(
-            ScaleAlphaAnimation.from(0.1f, 0.1f, 0.0f)
-                .setInterpolation(Interpolation.CubicOut).setDuration(900)
-        )
-        waveAnimation.addScaleAlphaAnimation(
-            ScaleAlphaAnimation.from(1.0f, 1.0f, 1.0f)
-                .setInterpolation(Interpolation.CubicOut).setDuration(900)
-        )
-        waveAnimation.addScaleAlphaAnimation(
-            ScaleAlphaAnimation.from(0.1f, 0.1f, 0.0f)
-                .setInterpolation(Interpolation.CubicOut).setDuration(900)
-        )
-        waveAnimation.addScaleAlphaAnimation(
-            ScaleAlphaAnimation.from(1.0f, 1.0f, 1.0f)
-                .setInterpolation(Interpolation.CubicOut).setDuration(900)
-        )*/
-
-        // 5. 설정한 ScaleAlphaAnimation 으로 LabelAnimator 를 생성하고, 라벨 추가.
-        /*val waveAnimator = kakaoMap.labelManager!!.addAnimator(waveAnimation)
-        waveAnimator.addLabels(waveAnimationLabel)*/
-
-        // 6. LabelAnimator 시작
-//        waveAnimator.start()
 
         kakaoMap.moveCamera(
             CameraUpdateFactory.newCenterPosition(pos, 17),
