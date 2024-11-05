@@ -27,14 +27,12 @@ class MemoListAdapter(val onClick: ((MemoItem) -> Unit)) : ListAdapter<MemoItem,
     inner class ViewHolder(private val binding: ItemMemoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MemoItem) {
             with(binding) {
-                tvTitle.text = item.title
                 tvDescription.text = item.description
                 tvLocation.text = item.location
 
                 root.setOnClickListener {
                     val intent = Intent(it.context, WriteMemoActivity::class.java).apply {
                         putExtra(FirebaseConstant.DB_MEMO_UUID, item.uuid)
-                        putExtra(FirebaseConstant.DB_MEMO_TITLE, item.title.toString())
                         putExtra(FirebaseConstant.DB_MEMO_DESCRIPTION, item.description.toString())
                         putExtra(FirebaseConstant.DB_MEMO_LOCATION, item.location.toString())
                         putExtra(FirebaseConstant.DB_MEMO_CATEGORY, item.category)

@@ -1,10 +1,12 @@
 package app.solution.swing_by.feature
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.constant.FirebaseConstant
+import app.solution.swing_by.constant.KakaoCategoryGroupCode
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -31,6 +33,10 @@ class WriteMemoActivity : AppCompatActivity() {
         with(binding) {
             btnConfirm.setOnClickListener { registerMemo() }
             btnCancel.setOnClickListener { finish() }
+
+            chipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
+                Log.d("SOL_LOG", "chipGroup.checkedChipId: $checkedIds")
+            }
         }
     }
 
@@ -39,7 +45,6 @@ class WriteMemoActivity : AppCompatActivity() {
         memoUUID = intent.getStringExtra(FirebaseConstant.DB_MEMO_UUID) ?: UUID.randomUUID().toString()
 
         with(binding) {
-            etTitle.apply { setText(intent.getStringExtra(FirebaseConstant.DB_MEMO_TITLE) ?: "") }
             etDescription.apply { setText(intent.getStringExtra(FirebaseConstant.DB_MEMO_DESCRIPTION) ?: "") }
             etLocation.apply { setText(intent.getStringExtra(FirebaseConstant.DB_MEMO_LOCATION) ?: "") }
             chipGroup.apply {
@@ -53,10 +58,19 @@ class WriteMemoActivity : AppCompatActivity() {
     private fun registerMemo() {
         val memoModel = mutableMapOf<String, Any>(
             FirebaseConstant.DB_MEMO_UUID to memoUUID,
-            FirebaseConstant.DB_MEMO_TITLE to binding.etTitle.text.toString(),
             FirebaseConstant.DB_MEMO_DESCRIPTION to binding.etDescription.text.toString(),
             FirebaseConstant.DB_MEMO_LOCATION to binding.etLocation.text.toString(),
             FirebaseConstant.DB_MEMO_CATEGORY to binding.chipGroup.checkedChipId,
+            FirebaseConstant.DB_MEMO_CATEGORY_CODE to when (binding.chipGroup.checkedChipId) {
+                2131230869 -> KakaoCategoryGroupCode.MT1
+                2131230865 -> KakaoCategoryGroupCode.CS2
+                2131230864 -> KakaoCategoryGroupCode.BK9
+                2131230866 -> KakaoCategoryGroupCode.PO3
+                2131230870 -> KakaoCategoryGroupCode.FD6
+                2131230863 -> KakaoCategoryGroupCode.CE7
+                2131230868 -> KakaoCategoryGroupCode.PM9
+                else -> ""
+            }
         )
 
         FirebaseAPI.registerMemo(memoUUID, memoModel, object : FirebaseAPI.FirebaseCallback {

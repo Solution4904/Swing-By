@@ -66,7 +66,7 @@ class MemoListActivity : AppCompatActivity() {
         memoListAdapter = MemoListAdapter {
             AlertDialog.Builder(this)
                 .setTitle("메모를 삭제하시겠습니까?")
-                .setMessage("[${it.location}] ${it.title} \n${it.description}")
+                .setMessage("[${it.location}] \n${it.description}")
                 .setPositiveButton("네") { _, _ ->
                     FirebaseAPI.deleteMemo(it.uuid.toString(), callback)
                     Toast.makeText(this@MemoListActivity, "메모를 삭제했습니다.", Toast.LENGTH_SHORT).show()

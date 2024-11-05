@@ -6,4 +6,5 @@
     <color name="personalBlack">#FF000000</color>
     <color name="personalWhite">#FFFFFFFF</color>
     <color name="personalGray">#7E7E7E</color>
+    <color name="personalGreen">#4CAF50</color>
 </resources>
