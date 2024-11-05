@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import app.solution.swing_by.feature.AuthActivity
 
 class NotificationManager(
     private val context: Context,
@@ -39,7 +40,7 @@ class NotificationManager(
     }
 
     fun showNotification(title: String, description: String) {
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, AuthActivity::class.java)
 
         val pendingIntent = PendingIntent.getActivity(
             context,

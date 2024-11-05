@@ -29,7 +29,7 @@
         android:theme="@style/Theme.Swing_By"
         tools:targetApi="34">
         <activity
-            android:name=".MainActivity"
+            android:name=".feature.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".feature.WriteMemoActivity" />
-        <activity android:name=".feature.AuthActivity" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">

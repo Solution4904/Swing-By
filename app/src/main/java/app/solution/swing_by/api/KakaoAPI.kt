@@ -5,8 +5,6 @@ import android.util.Log
 import app.solution.swing_by.Document
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
-import app.solution.swing_by.NotificationManager
-import app.solution.swing_by.constant.KakaoCategoryGroupCode
 import app.solution.swing_by.constant.KakaoConstant
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -84,21 +82,15 @@ class KakaoAPI {
         }
 
         // # 주변 키워드 검색
-        fun searching(context: Context, keyword: String, latLng: LatLng, categoryGroupCode: String, callback: KakaoCallBack) {
+        fun searching(keyword: String, latLng: LatLng, categoryGroupCode: String, callback: KakaoCallBack) {
             val retrofitService = retrofit.create(KakaoAPIService::class.java)
-            retrofitService.getSerchingResult(query = keyword, x = latLng.longitude.toString(), y = latLng.latitude.toString(), categoryGroupCode = categoryGroupCode.toString())
+            retrofitService.getSerchingResult(query = keyword, x = latLng.longitude.toString(), y = latLng.latitude.toString(), categoryGroupCode = categoryGroupCode)
                 .enqueue(object : Callback<KeywordSerchingResultData> {
                     override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
                         val nearbySerchResults = ArrayList<Document>()
                         for (document in p1.body()!!.documents) {
                             Log.d(TAG, "document\n$document")
                             nearbySerchResults.add(document)
-
-//                            val notificationManager = NotificationManager(context)
-//                            notificationManager.showNotification(
-//                                keyword,
-//                                "${document.place_name} (${document.distance}m)"
-//                            )
                         }
 
                         callback.successCallback(nearbySerchResults.toTypedArray())
@@ -112,5 +104,4 @@ class KakaoAPI {
                 })
         }
     }
-
 }

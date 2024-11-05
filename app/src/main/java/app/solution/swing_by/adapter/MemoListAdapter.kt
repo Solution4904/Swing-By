@@ -11,6 +11,7 @@ import app.solution.swing_by.databinding.ItemMemoBinding
 import app.solution.swing_by.feature.WriteMemoActivity
 import app.solution.swing_by.item.MemoItem
 
+
 class MemoListAdapter(val onClick: ((MemoItem) -> Unit)) : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {
     companion object {
         val differ = object : DiffUtil.ItemCallback<MemoItem>() {

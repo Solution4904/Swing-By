@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import app.solution.swing_by.Document
 import app.solution.swing_by.MyApplication
 import app.solution.swing_by.api.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
@@ -29,8 +30,6 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setButtons()
-        /*requestPermission()
-        getCurrentLocation()*/
     }
 
     // # 버튼 이벤트 추가
@@ -46,40 +45,6 @@ class AuthActivity : AppCompatActivity() {
             }
         }
     }
-
-    /*// # 현재 위치 정보 불러오기
-    @SuppressLint("MissingPermission")
-    private fun getCurrentLocation() {
-        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-            .addOnSuccessListener {
-                it?.let {
-                    Log.d("SOL_LOG", "getCurrentLocation: ${it.longitude} / ${it.latitude}")
-                }
-            }
-    }
-
-    // # 필요 권한 요청
-    //    @SuppressLint("MissingPermission")
-    private fun requestPermission() {
-        TedPermission.create().apply {
-            setPermissionListener(object : PermissionListener {
-                override fun onPermissionGranted() {
-                    Toast.makeText(this@AuthActivity, "Permission Granted", Toast.LENGTH_SHORT).show();
-                }
-
-                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                    Toast.makeText(this@AuthActivity, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
-                }
-            })
-            setDeniedMessage("서비스를 이용하시려면 위치 권한이 필요합니다.")
-            setPermissions(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.INTERNET
-            ).check()
-        }
-    }*/
 
     // # 이메일 계정 가입
     private fun signUp() {
@@ -132,6 +97,7 @@ class AuthActivity : AppCompatActivity() {
             }
 
             override fun successCallback() {}
+            override fun successCallback(array: Array<Document>) {}
             override fun failureCallback() {}
         })
     }

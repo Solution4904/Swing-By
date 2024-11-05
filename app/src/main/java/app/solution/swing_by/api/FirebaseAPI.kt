@@ -47,7 +47,7 @@ class FirebaseAPI {
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             callback?.successCallback(snapshot)
-                            Log.d(TAG, "onDataChange: ${snapshot}")
+                            Log.d(TAG, "onDataChange: $snapshot")
                         }
 
                         override fun onCancelled(error: DatabaseError) {
@@ -55,15 +55,6 @@ class FirebaseAPI {
                             Log.e(TAG, "onCancelled: ${error.message}", )
                         }
                     })
-//                    .addListenerForSingleValueEvent(object : ValueEventListener {
-//                        override fun onDataChange(snapshot: DataSnapshot) {
-//                            callback?.successCallback(snapshot)
-//                        }
-//
-//                        override fun onCancelled(error: DatabaseError) {
-//                            callback?.failureCallback()
-//                        }
-//                    })
             }
         }
 
