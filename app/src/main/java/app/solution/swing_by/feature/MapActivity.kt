@@ -110,7 +110,7 @@ class MapActivity : AppCompatActivity() {
                     finish()
                 }
             })
-            setDeniedMessage("서비스를 이용하시려면 권한이 필요합니다.")
+            setDeniedMessage(resources.getString(R.string.permission_is_required_to_use_the_service))
             setPermissions(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -207,7 +207,7 @@ class MapActivity : AppCompatActivity() {
         // upper layout
         val text = GuiText(index.place_name).apply {
             textSize = 23
-            textColor = Color.parseColor("#013ADF")
+            textColor = Color.parseColor(resources.getColor(R.color.personalBlue).toString())
         }
         text.setTextSize(25)
 
