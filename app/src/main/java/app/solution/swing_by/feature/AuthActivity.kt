@@ -2,11 +2,11 @@ package app.solution.swing_by.feature
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.Document
 import app.solution.swing_by.MyApplication
-import app.solution.swing_by.api.LocalDataConstant
+import app.solution.swing_by.MyUtils
+import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.databinding.ActivityAuthBinding
@@ -59,7 +59,7 @@ class AuthActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            MyUtils.toast(this, "이메일과 비밀번호를 입력해주세요.")
             return
         }
 

@@ -1,8 +1,8 @@
 package app.solution.swing_by.feature
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import app.solution.swing_by.MyUtils
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivitySignupBinding
 import com.google.android.gms.tasks.Task
@@ -36,7 +36,7 @@ class SignUpActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            MyUtils.toast(this, "이메일과 비밀번호를 입력해주세요.")
             return
         }
 

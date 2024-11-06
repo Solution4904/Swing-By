@@ -1,8 +1,10 @@
 package app.solution.swing_by.api
 
-import android.util.Log
+import app.solution.swing_by.LogType
 import app.solution.swing_by.MyApplication
+import app.solution.swing_by.MyUtils
 import app.solution.swing_by.constant.FirebaseConstant
+import app.solution.swing_by.constant.LocalDataConstant
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.auth.AuthResult
@@ -24,7 +26,6 @@ class FirebaseAPI {
     }
 
     companion object {
-        private const val TAG = "SOL_LOG"
         private val FirebaseDatabase = Firebase.database.reference
         private val FirebaseAuth = Firebase.auth
 
@@ -47,12 +48,12 @@ class FirebaseAPI {
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             callback?.successCallback(snapshot)
-                            Log.d(TAG, "onDataChange: $snapshot")
+                            MyUtils.log(detail = "onDataChange: $snapshot")
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             callback?.failureCallback()
-                            Log.e(TAG, "onCancelled: ${error.message}", )
+                            MyUtils.log(logType = LogType.ERROR, detail = "onCancelled: ${error.message}")
                         }
                     })
             }
@@ -66,8 +67,8 @@ class FirebaseAPI {
                         if (it.isSuccessful) {
                             callback?.successCallback()
                         } else {
-                            Log.e(TAG, "registerMemo: ${it.exception?.stackTrace}")
                             callback?.failureCallback()
+                            MyUtils.log(logType = LogType.ERROR, detail = "registerMemo: ${it.exception?.stackTrace}")
                         }
                     }
             }
@@ -81,8 +82,8 @@ class FirebaseAPI {
                         if (it.isSuccessful) {
                             callback?.successCallback()
                         } else {
-                            Log.e(TAG, "deleteMemo: ${it.exception?.stackTrace}")
                             callback?.failureCallback()
+                            MyUtils.log(logType = LogType.ERROR, detail = "deleteMemo: ${it.exception?.stackTrace}")
                         }
                     }
             }
@@ -95,8 +96,8 @@ class FirebaseAPI {
                     if (it.isSuccessful) {
                         callback?.successCallback(it)
                     } else {
-                        Log.d(TAG, "signIn: ${it.exception?.stackTrace}")
                         callback?.failureCallback()
+                        MyUtils.log(detail = "signIn: ${it.exception?.stackTrace}")
                     }
                 }
         }
@@ -108,8 +109,8 @@ class FirebaseAPI {
                     if (it.isSuccessful) {
                         callback?.successCallback()
                     } else {
-                        Log.d(TAG, "signUp: ${it.exception?.stackTrace}")
                         callback?.failureCallback()
+                        MyUtils.log(detail = "signUp: ${it.exception?.stackTrace}")
                     }
                 }
         }
