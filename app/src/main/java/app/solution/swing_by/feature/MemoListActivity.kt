@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.MyUtils
+import app.solution.swing_by.R
 import app.solution.swing_by.adapter.MemoListAdapter
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivityMemoListBinding
@@ -65,14 +66,14 @@ class MemoListActivity : AppCompatActivity() {
 
         memoListAdapter = MemoListAdapter {
             AlertDialog.Builder(this)
-                .setTitle("메모를 삭제하시겠습니까?")
+                .setTitle(resources.getString(R.string.delete_a_memo))
                 .setMessage("[${it.location}] \n${it.description}")
-                .setPositiveButton("네") { _, _ ->
+                .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
                     FirebaseAPI.deleteMemo(it.uuid.toString(), callback)
-                    MyUtils.toast(this@MemoListActivity, "메모를 삭제했습니다.")
+                    MyUtils.toast(this@MemoListActivity, resources.getString(R.string.memo_deleted))
                 }
-                .setNegativeButton("아니오") { _, _ ->
-                    MyUtils.toast(this@MemoListActivity, "작업을 취소했습니다.")
+                .setNegativeButton(resources.getString(R.string.no)) { _, _ ->
+                    MyUtils.toast(this@MemoListActivity, resources.getString(R.string.memo_deleted_cancel))
                 }
                 .create()
                 .show()

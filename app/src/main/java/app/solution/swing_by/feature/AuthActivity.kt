@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.Document
 import app.solution.swing_by.MyApplication
 import app.solution.swing_by.MyUtils
+import app.solution.swing_by.R
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
@@ -59,7 +60,7 @@ class AuthActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
-            MyUtils.toast(this, "이메일과 비밀번호를 입력해주세요.")
+            MyUtils.toast(this, resources.getString(R.string.please_enter_your_ID_and_password))
             return
         }
 

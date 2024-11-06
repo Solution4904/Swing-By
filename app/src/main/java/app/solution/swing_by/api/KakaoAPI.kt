@@ -1,11 +1,13 @@
 package app.solution.swing_by.api
 
 import android.content.Context
+import android.content.res.Resources
 import app.solution.swing_by.Document
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
 import app.solution.swing_by.LogType
 import app.solution.swing_by.MyUtils
+import app.solution.swing_by.R
 import app.solution.swing_by.constant.KakaoConstant
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -60,12 +62,12 @@ class KakaoAPI {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                 UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
                     if (error != null) {
-                        MyUtils.log(logType = LogType.ERROR, detail = "카카오톡으로 로그인 실패 -> $error")
+                        MyUtils.log(logType = LogType.ERROR, detail = "${R.string.kakaotalk_login_failure} -> $error")
 
                         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                            MyUtils.log(logType = LogType.ERROR, detail = "카카오계정 로그인 의도적인 취소")
+//                            MyUtils.log(logType = LogType.ERROR, detail = "카카오계정 로그인 의도적인 취소")
 
                             return@loginWithKakaoTalk
                         }
@@ -73,7 +75,7 @@ class KakaoAPI {
                         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                     } else if (token != null) {
-                        MyUtils.log(detail = "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        MyUtils.log(detail = "${R.string.kakaotalk_login_success} -> ${token.accessToken}")
                     }
                 }
             } else {
