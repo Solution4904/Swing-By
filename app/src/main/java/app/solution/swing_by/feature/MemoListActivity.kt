@@ -3,9 +3,9 @@ package app.solution.swing_by.feature
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import app.solution.swing_by.MyUtils
 import app.solution.swing_by.adapter.MemoListAdapter
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivityMemoListBinding
@@ -69,10 +69,10 @@ class MemoListActivity : AppCompatActivity() {
                 .setMessage("[${it.location}] \n${it.description}")
                 .setPositiveButton("네") { _, _ ->
                     FirebaseAPI.deleteMemo(it.uuid.toString(), callback)
-                    Toast.makeText(this@MemoListActivity, "메모를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                    MyUtils.toast(this@MemoListActivity, "메모를 삭제했습니다.")
                 }
                 .setNegativeButton("아니오") { _, _ ->
-                    Toast.makeText(this@MemoListActivity, "작업을 취소했습니다.", Toast.LENGTH_SHORT).show()
+                    MyUtils.toast(this@MemoListActivity, "작업을 취소했습니다.")
                 }
                 .create()
                 .show()

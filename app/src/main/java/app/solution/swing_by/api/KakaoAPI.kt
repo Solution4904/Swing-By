@@ -1,10 +1,11 @@
 package app.solution.swing_by.api
 
 import android.content.Context
-import android.util.Log
 import app.solution.swing_by.Document
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
+import app.solution.swing_by.LogType
+import app.solution.swing_by.MyUtils
 import app.solution.swing_by.constant.KakaoConstant
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
@@ -29,7 +30,6 @@ class KakaoAPI {
 
 
     companion object {
-        private const val TAG = "SOL_LOG"
         private val retrofit: Retrofit by lazy {
             Retrofit.Builder()
                 .baseUrl(KakaoConstant.BASE_URL)
@@ -42,9 +42,8 @@ class KakaoAPI {
         fun signIn(context: Context, callBack: KakaoCallBack? = null) {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    Log.d(TAG, error.toString())
-
                     callBack?.failureCallback()
+                    MyUtils.log(logType = LogType.ERROR, detail = error.toString())
                 } else if (token != null) {
                     UserApiClient.instance.accessTokenInfo { tokenInfo, _ ->
                         UserApiClient.instance.me { _, _ ->
@@ -61,19 +60,20 @@ class KakaoAPI {
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
                 UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
                     if (error != null) {
-                        Log.e(TAG, "카카오톡으로 로그인 실패", error)
+                        MyUtils.log(logType = LogType.ERROR, detail = "카카오톡으로 로그인 실패 -> $error")
 
                         // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                         // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
                         if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                            Log.d(TAG, "카카오계정 로그인 의도적인 취소")
+                            MyUtils.log(logType = LogType.ERROR, detail = "카카오계정 로그인 의도적인 취소")
+
                             return@loginWithKakaoTalk
                         }
 
                         // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
                         UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
                     } else if (token != null) {
-                        Log.d(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
+                        MyUtils.log(detail = "카카오톡으로 로그인 성공 ${token.accessToken}")
                     }
                 }
             } else {
@@ -87,9 +87,11 @@ class KakaoAPI {
             retrofitService.getSerchingResult(query = keyword, x = latLng.longitude.toString(), y = latLng.latitude.toString(), categoryGroupCode = categoryGroupCode)
                 .enqueue(object : Callback<KeywordSerchingResultData> {
                     override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
+                        MyUtils.log(detail = "${p1.body()!!.documents}")
+
                         val nearbySerchResults = ArrayList<Document>()
+
                         for (document in p1.body()!!.documents) {
-                            Log.d(TAG, "document\n$document")
                             nearbySerchResults.add(document)
                         }
 
@@ -97,9 +99,8 @@ class KakaoAPI {
                     }
 
                     override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
-                        Log.d(TAG, p1.stackTrace.toString())
-
                         callback.failureCallback()
+                        MyUtils.log(LogType.ERROR, p1.stackTrace.toString())
                     }
                 })
         }

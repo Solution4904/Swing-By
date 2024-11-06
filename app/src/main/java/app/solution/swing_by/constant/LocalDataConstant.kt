@@ -1,4 +1,4 @@
-package app.solution.swing_by.api
+package app.solution.swing_by.constant
 
 class LocalDataConstant {
     companion object {

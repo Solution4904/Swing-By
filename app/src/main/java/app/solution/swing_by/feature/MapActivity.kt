@@ -8,8 +8,6 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.Document
 import app.solution.swing_by.R
@@ -64,17 +62,10 @@ class MapActivity : AppCompatActivity() {
         BottomSheetBehavior.from(binding.layoutBottomsheet.root).state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.mapview.start(object : MapLifeCycleCallback() {
-            override fun onMapDestroy() {
-                Log.d("SOL_LOG", "onMapDestroy: ")
-            }
-
-            override fun onMapError(p0: Exception?) {
-                Log.d("SOL_LOG", "onMapError: ${p0?.stackTrace}")
-            }
+            override fun onMapDestroy() {}
+            override fun onMapError(p0: Exception?) {}
         }, object : KakaoMapReadyCallback() {
             override fun onMapReady(p0: KakaoMap) {
-                Log.d("SOL_LOG", "onMapReady: ")
-
                 kakaoMap = p0
                 labelLayer = p0.labelManager?.layer
 
@@ -109,13 +100,13 @@ class MapActivity : AppCompatActivity() {
         TedPermission.create().apply {
             setPermissionListener(object : PermissionListener {
                 override fun onPermissionGranted() {
-                    Toast.makeText(this@MapActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@MapActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
 
                     trackMyLocation()
                 }
 
                 override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-                    Toast.makeText(this@MapActivity, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@MapActivity, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show()
                     finish()
                 }
             })
@@ -179,11 +170,11 @@ class MapActivity : AppCompatActivity() {
             showDetailToLocation(labelId!!)
         }
 
-        // TODO: 설치되어 있어도 packageManager.queryIntentActivities가 null?로 잡혀서 마켓 연결하는 API 수준? 문제가 있음
-        // TODO: https://apis.map.kakao.com/android_v2/docs/api-guide/urlscheme/
     }
 
     private fun navigation(labelData: LabelData) {
+        // TODO: 설치되어 있어도 packageManager.queryIntentActivities가 null?로 잡혀서 마켓 연결하는 API 수준? 문제가 있음
+        // TODO: https://apis.map.kakao.com/android_v2/docs/api-guide/urlscheme/
         val navigationScheme = "kakaomap://route?sp=${currentLatLng.latitude},${currentLatLng.longitude}&ep=${labelData.latLng.latitude},${labelData.latLng.longitude}&by=FOOT"
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(navigationScheme)).apply {
