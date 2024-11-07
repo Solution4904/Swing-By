@@ -1,14 +1,13 @@
 package app.solution.swing_by.feature
 
 import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.MyApplication
 import app.solution.swing_by.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
+import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.databinding.ActivityAuthBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -18,15 +17,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class AuthActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAuthBinding
+class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::inflate) {
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = ActivityAuthBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun initListener() {
+        super.initListener()
 
         setButtons()
     }
