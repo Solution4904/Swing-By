@@ -47,6 +47,7 @@ import com.kakao.vectormap.mapwidget.component.Orientation
 class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private lateinit var kakaoMap: KakaoMap
+    private lateinit var kakaomapViewport:Rect
     private lateinit var currentLatLng: LatLng
     private var labelLayer: LabelLayer? = null
     private var infoWindowLayer: InfoWindowLayer? = null
@@ -67,6 +68,7 @@ class MapActivity : AppCompatActivity() {
         }, object : KakaoMapReadyCallback() {
             override fun onMapReady(p0: KakaoMap) {
                 kakaoMap = p0
+                kakaomapViewport = p0.viewport
                 labelLayer = p0.labelManager?.layer
 
                 kakaoMap.setOnLabelClickListener { kakaoMap, labelLayer, label ->
@@ -145,7 +147,7 @@ class MapActivity : AppCompatActivity() {
                             override fun successCallback(array: Array<Document>) {
                                 array.forEach { index ->
                                     infoWindowLayer?.addInfoWindow(
-                                        getComplexLayout(index, memoItem)
+                                        getComplexLayout(index)
                                     )
                                     labelDatas[index.place_name] = LabelData(index.place_name, memoItem.description!!, LatLng.from(index.y.toDouble(), index.x.toDouble()))
                                 }
@@ -196,7 +198,7 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    private fun getComplexLayout(index: Document, memoItem: MemoItem): InfoWindowOptions {
+    private fun getComplexLayout(index: Document): InfoWindowOptions {
         // body
         val body = GuiLayout(Orientation.Vertical)
         body.setPadding(15, 15, 15, 13)
@@ -207,7 +209,7 @@ class MapActivity : AppCompatActivity() {
         // upper layout
         val text = GuiText(index.place_name).apply {
             textSize = 23
-            textColor = Color.parseColor(resources.getColor(R.color.personalBlue).toString())
+            textColor = getColor(R.color.personalBlue)
         }
         text.setTextSize(25)
 
@@ -250,11 +252,7 @@ class MapActivity : AppCompatActivity() {
             tvLocationName.text = labelDatas[labelId]!!.locationName
             tvMemoDescription.text = labelDatas[labelId]!!.description
 
-            val viewport: Rect = kakaoMap.viewport
-            val x = viewport.width()
-            val y = viewport.height()
-
-            BottomSheetBehavior.from(root).peekHeight = y / 2
+            BottomSheetBehavior.from(root).peekHeight = kakaomapViewport.height() / 2
             BottomSheetBehavior.from(root).state = BottomSheetBehavior.STATE_COLLAPSED
             setVisible(true)
 

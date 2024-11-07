@@ -10,6 +10,8 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+var properties = Properties()
+properties.load(FileInputStream("local.properties"))
 
 android {
     namespace = "app.solution.swing_by"
@@ -23,6 +25,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", properties.getProperty("KAKAO_NATIVE_APP_KEY"))
+        buildConfigField("String", "KAKAO_REST_API_KEY", properties.getProperty("KAKAO_REST_API_KEY"))
+        manifestPlaceholders["MANIFEST_KAKAO_NATIVE_APP_KEY"] = properties.getProperty("MANIFEST_KAKAO_NATIVE_APP_KEY")
     }
 
     buildTypes {
@@ -40,6 +45,8 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
+
         viewBinding = true
     }
 }
