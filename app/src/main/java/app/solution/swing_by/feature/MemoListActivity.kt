@@ -11,8 +11,6 @@ import app.solution.swing_by.adapter.MemoListAdapter
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivityMemoListBinding
 import app.solution.swing_by.item.MemoItem
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 
 
@@ -49,7 +47,7 @@ class MemoListActivity : AppCompatActivity() {
 
     // # 메모 리스트 불러오기
     private fun setMemoList() {
-        val callback = object : FirebaseAPI.FirebaseCallback {
+        val callback = object : FirebaseAPI.CallbackByDataSnapshot {
             override fun successCallback(results: DataSnapshot?) {
                 results?.let {
                     val elements = it.children.map { snapshot ->
@@ -59,7 +57,6 @@ class MemoListActivity : AppCompatActivity() {
                 }
             }
 
-            override fun successCallback(results: Task<AuthResult>) {}
             override fun failureCallback() {}
         }
         FirebaseAPI.getMemoList(callback)

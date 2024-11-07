@@ -7,9 +7,6 @@ import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.constant.KakaoCategoryGroupCode
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.database.DataSnapshot
 import java.util.UUID
 
 class WriteMemoActivity : AppCompatActivity() {
@@ -68,12 +65,11 @@ class WriteMemoActivity : AppCompatActivity() {
             }
         )
 
-        FirebaseAPI.registerMemo(memoUUID, memoModel, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback(results: DataSnapshot?) {
+        FirebaseAPI.registerMemo(memoUUID, memoModel, object : FirebaseAPI.Callback {
+            override fun successCallback() {
                 finish()
             }
 
-            override fun successCallback(results: Task<AuthResult>) {}
             override fun failureCallback() {}
         })
     }

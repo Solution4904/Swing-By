@@ -22,9 +22,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class KakaoAPI {
-    interface KakaoCallBack {
-        fun successCallback()
+    interface CallbackByDocuments {
         fun successCallback(array: Array<Document>)
+        fun failureCallback()
+    }
+
+    interface CallbackByAccessTokenInfo {
         fun successCallback(accessTokenInfo: AccessTokenInfo?)
         fun failureCallback()
     }
@@ -40,7 +43,7 @@ class KakaoAPI {
 
 
         // 로그인
-        fun signIn(context: Context, callBack: KakaoCallBack? = null) {
+        fun signIn(context: Context, callBack: CallbackByAccessTokenInfo? = null) {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
                     callBack?.failureCallback()
@@ -83,7 +86,7 @@ class KakaoAPI {
         }
 
         // # 주변 키워드 검색
-        fun searching(keyword: String, latLng: LatLng, categoryGroupCode: String, callback: KakaoCallBack) {
+        fun searching(keyword: String, latLng: LatLng, categoryGroupCode: String, callback: CallbackByDocuments) {
             val retrofitService = retrofit.create(KakaoAPIService::class.java)
             retrofitService.getSerchingResult(query = keyword, x = latLng.longitude.toString(), y = latLng.latitude.toString(), categoryGroupCode = categoryGroupCode)
                 .enqueue(object : Callback<KeywordSerchingResultData> {

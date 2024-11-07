@@ -3,7 +3,6 @@ package app.solution.swing_by.feature
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import app.solution.swing_by.Document
 import app.solution.swing_by.MyApplication
 import app.solution.swing_by.MyUtils
 import app.solution.swing_by.R
@@ -13,7 +12,6 @@ import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.databinding.ActivityAuthBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
-import com.google.firebase.database.DataSnapshot
 import com.kakao.sdk.user.model.AccessTokenInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +62,7 @@ class AuthActivity : AppCompatActivity() {
             return
         }
 
-        FirebaseAPI.signIn(email, password, object : FirebaseAPI.FirebaseCallback {
+        FirebaseAPI.signIn(email, password, object : FirebaseAPI.CallbackByAuthResult {
             override fun successCallback(results: Task<AuthResult>) {
                 val currentUser = results.result.user
 
@@ -79,14 +77,13 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
 
-            override fun successCallback(results: DataSnapshot?) {}
             override fun failureCallback() {}
         })
     }
 
     // # 카카오 계정 간편 로그인
     private fun kakaoSignIn() {
-        KakaoAPI.signIn(this, object : KakaoAPI.KakaoCallBack {
+        KakaoAPI.signIn(this, object : KakaoAPI.CallbackByAccessTokenInfo {
             override fun successCallback(accessTokenInfo: AccessTokenInfo?) {
                 CoroutineScope(Dispatchers.Main).launch {
                     MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, accessTokenInfo?.id.toString())
@@ -97,8 +94,6 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
 
-            override fun successCallback() {}
-            override fun successCallback(array: Array<Document>) {}
             override fun failureCallback() {}
         })
     }
