@@ -1,7 +1,6 @@
 package app.solution.swing_by.api
 
 import android.content.Context
-import android.content.res.Resources
 import app.solution.swing_by.Document
 import app.solution.swing_by.KakaoAPIService
 import app.solution.swing_by.KeywordSerchingResultData
