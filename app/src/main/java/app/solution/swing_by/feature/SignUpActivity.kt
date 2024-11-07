@@ -6,9 +6,6 @@ import app.solution.swing_by.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.databinding.ActivitySignupBinding
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.database.DataSnapshot
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -41,12 +38,11 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
 
-        FirebaseAPI.signUp(email, password, object : FirebaseAPI.FirebaseCallback {
-            override fun successCallback(results: DataSnapshot?) {
+        FirebaseAPI.signUp(email, password, object : FirebaseAPI.Callback {
+            override fun successCallback() {
                 finish()
             }
 
-            override fun successCallback(results: Task<AuthResult>) {}
             override fun failureCallback() {}
         })
     }

@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
@@ -18,13 +17,10 @@ import app.solution.swing_by.databinding.ActivityMapBinding
 import app.solution.swing_by.item.MemoItem
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.database.DataSnapshot
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
-import com.kakao.sdk.user.model.AccessTokenInfo
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -137,13 +133,13 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun searching() {
-        FirebaseAPI.getMemoList(object : FirebaseAPI.FirebaseCallback {
+        FirebaseAPI.getMemoList(object : FirebaseAPI.CallbackByDataSnapshot {
             override fun successCallback(results: DataSnapshot?) {
                 results?.let { result ->
                     result.children.map { snapshot ->
                         val memoItem = snapshot.getValue(MemoItem::class.java)
 
-                        KakaoAPI.searching("${memoItem?.location}", currentLatLng, memoItem?.categoryCode!!, object : KakaoAPI.KakaoCallBack {
+                        KakaoAPI.searching("${memoItem?.location}", currentLatLng, memoItem?.categoryCode!!, object : KakaoAPI.CallbackByDocuments {
                             override fun successCallback(array: Array<Document>) {
                                 array.forEach { index ->
                                     infoWindowLayer?.addInfoWindow(
@@ -153,15 +149,12 @@ class MapActivity : AppCompatActivity() {
                                 }
                             }
 
-                            override fun successCallback() {}
-                            override fun successCallback(accessTokenInfo: AccessTokenInfo?) {}
                             override fun failureCallback() {}
                         })
                     }
                 }
             }
 
-            override fun successCallback(results: Task<AuthResult>) {}
             override fun failureCallback() {}
         })
     }

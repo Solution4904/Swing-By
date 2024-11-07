@@ -19,9 +19,18 @@ import kotlinx.coroutines.launch
 
 
 class FirebaseAPI {
-    interface FirebaseCallback {
-        fun successCallback(results: DataSnapshot? = null)
+    interface CallbackByAuthResult {
         fun successCallback(results: Task<AuthResult>)
+        fun failureCallback()
+    }
+
+    interface CallbackByDataSnapshot {
+        fun successCallback(results: DataSnapshot? = null)
+        fun failureCallback()
+    }
+
+    interface Callback {
+        fun successCallback()
         fun failureCallback()
     }
 
@@ -42,7 +51,7 @@ class FirebaseAPI {
         }
 
         // 메모 리스트 불러오기
-        fun getMemoList(callback: FirebaseCallback? = null) {
+        fun getMemoList(callback: CallbackByDataSnapshot? = null) {
             validation { uid ->
                 FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(uid)
                     .addValueEventListener(object : ValueEventListener {
@@ -60,7 +69,7 @@ class FirebaseAPI {
         }
 
         // 메모 등록 & 수정
-        fun registerMemo(memoUUID: String, memoModel: MutableMap<String, Any>, callback: FirebaseCallback? = null) {
+        fun registerMemo(memoUUID: String, memoModel: MutableMap<String, Any>, callback: Callback? = null) {
             validation { uid ->
                 FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(uid).child(memoUUID).setValue(memoModel)
                     .addOnCompleteListener {
@@ -75,7 +84,7 @@ class FirebaseAPI {
         }
 
         // 메모 삭제
-        fun deleteMemo(memoUUID: String, callback: FirebaseCallback? = null) {
+        fun deleteMemo(memoUUID: String, callback: CallbackByDataSnapshot? = null) {
             validation { uid ->
                 FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(uid).child(memoUUID).removeValue()
                     .addOnCompleteListener {
@@ -90,7 +99,7 @@ class FirebaseAPI {
         }
 
         // 이메일 로그인
-        fun signIn(email: String, password: String, callback: FirebaseCallback? = null) {
+        fun signIn(email: String, password: String, callback: CallbackByAuthResult? = null) {
             FirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -103,7 +112,7 @@ class FirebaseAPI {
         }
 
         // 이메일 가입
-        fun signUp(email: String, password: String, callback: FirebaseCallback? = null) {
+        fun signUp(email: String, password: String, callback: Callback? = null) {
             FirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
