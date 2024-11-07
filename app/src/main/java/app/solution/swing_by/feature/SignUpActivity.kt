@@ -1,21 +1,16 @@
 package app.solution.swing_by.feature
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
+import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.databinding.ActivitySignupBinding
 
-class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignupBinding
+class SignUpActivity : BaseActivity<ActivitySignupBinding>(ActivitySignupBinding::inflate) {
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = ActivitySignupBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun initListener() {
+        super.initListener()
 
         setButtons()
     }

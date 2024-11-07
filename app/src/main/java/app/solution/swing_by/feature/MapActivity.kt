@@ -6,12 +6,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import app.solution.swing_by.Document
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
+import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.constant.KakaoConstant
 import app.solution.swing_by.databinding.ActivityMapBinding
 import app.solution.swing_by.item.MemoItem
@@ -40,8 +39,7 @@ import com.kakao.vectormap.mapwidget.component.GuiText
 import com.kakao.vectormap.mapwidget.component.Orientation
 
 
-class MapActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMapBinding
+class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate) {
     private lateinit var kakaoMap: KakaoMap
     private lateinit var kakaomapViewport:Rect
     private lateinit var currentLatLng: LatLng
@@ -50,12 +48,25 @@ class MapActivity : AppCompatActivity() {
     private val labelDatas: MutableMap<String, LabelData> = mutableMapOf()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView() {
+        super.initView()
 
-        binding = ActivityMapBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setMap()
+    }
 
+    override fun onResume() {
+        super.onResume()
+
+        binding.mapview.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        binding.mapview.pause()
+    }
+
+    private fun setMap(){
         BottomSheetBehavior.from(binding.layoutBottomsheet.root).state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.mapview.start(object : MapLifeCycleCallback() {
@@ -81,17 +92,6 @@ class MapActivity : AppCompatActivity() {
                 checkPermissions()
             }
         })
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        binding.mapview.resume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.mapview.pause()
     }
 
     private fun checkPermissions() {

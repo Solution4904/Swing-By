@@ -4,24 +4,26 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import app.solution.swing_by.api.FirebaseAPI
+import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.constant.KakaoCategoryGroupCode
 import app.solution.swing_by.databinding.ActivityWriteMemoBinding
 import java.util.UUID
 
-class WriteMemoActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityWriteMemoBinding
+class WriteMemoActivity : BaseActivity<ActivityWriteMemoBinding>(ActivityWriteMemoBinding::inflate) {
     private lateinit var memoUUID: String
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView() {
+        super.initView()
 
-        binding = ActivityWriteMemoBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        getPreviousData()
+    }
+
+    override fun initListener() {
+        super.initListener()
 
         setButtons()
-        getPreviousData()
     }
 
     // # 버튼 이벤트 추가
