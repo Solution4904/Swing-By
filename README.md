@@ -22,6 +22,5 @@
 - 특정 동장이 완료되었을 때 함수 내에 해당 내용을 적는 방식이 아닌 플래그? 방식으로 특정 상황으로 바뀌었을 때 원하는 동작들을 따로 작성하는 방법은 없나?
 - progress를 baseActivity단에서 create까지 끝마쳐놓고 사용하는 곳에서 show/hide만 호출할 수 있는 방법 없나? (binding.root.addview만 되면 해결될 것 같은데 baseActivity에선 addview가 호출되질 않음)
 - FSM 가능? https://kimchanjung.github.io/design-pattern/2020/05/26/state-pattern/
-- 프로그래스바 색상 변경
 - 아이콘 이미지들 알맞게 변경
 - 메모 리스트에 마지막 수정 날짜 표시 텍스트뷰

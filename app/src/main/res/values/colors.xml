@@ -6,7 +6,7 @@
     <color name="personalBlack">#FF000000</color>
     <color name="personalWhite">#FFFFFFFF</color>
     <color name="personalGray">#7E7E7E</color>
-    <color name="personalOpaque">#80000000</color>
-    <color name="personalGreen">#4CAF50</color>
+    <color name="personalOpaque">#4D000000</color>
+    <color name="personalGreen">#8EF692</color>
     <color name="personalBlue">#013ADF</color>
 </resources>
