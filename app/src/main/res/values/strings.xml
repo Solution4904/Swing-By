@@ -12,4 +12,5 @@
     <string name="no">아니오</string>
     <string name="memo_deleted">메모가 삭제되었습니다</string>
     <string name="memo_deleted_cancel">제거가 취소되었습니다</string>
+    <string name="please_wait">잠시만 기다려주세요</string>
 </resources>
