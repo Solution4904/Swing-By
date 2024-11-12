@@ -1,6 +1,8 @@
-package app.solution.swing_by
+package app.solution.swing_by.root
 
 import android.app.Application
+import app.solution.swing_by.BuildConfig
+import app.solution.swing_by.common.LocalDataManager
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.vectormap.KakaoMapSdk
 

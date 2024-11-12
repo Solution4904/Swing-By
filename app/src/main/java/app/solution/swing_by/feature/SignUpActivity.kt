@@ -1,6 +1,6 @@
 package app.solution.swing_by.feature
 
-import app.solution.swing_by.MyUtils
+import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.base.BaseActivity

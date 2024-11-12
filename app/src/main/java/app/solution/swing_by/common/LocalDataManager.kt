@@ -1,4 +1,4 @@
-package app.solution.swing_by
+package app.solution.swing_by.common
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

@@ -1,13 +1,14 @@
 package app.solution.swing_by.feature
 
 import android.content.Intent
-import app.solution.swing_by.MyApplication
-import app.solution.swing_by.MyUtils
+import app.solution.swing_by.root.MyApplication
+import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.base.BaseActivity
+import app.solution.swing_by.common.ProgressView
 import app.solution.swing_by.databinding.ActivityAuthBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -18,7 +19,16 @@ import kotlinx.coroutines.launch
 
 
 class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::inflate) {
+    private val progressView: ProgressView by lazy {
+        ProgressView(this, this).create(this, this)
+    }
 
+
+    override fun initView() {
+        super.initView()
+
+        binding.root.addView(progressView)
+    }
 
     override fun initListener() {
         super.initListener()
@@ -49,11 +59,15 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
 
     // # 이메일 계정 로그인
     private fun emailSignIn() {
+        progressView.show()
+
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
             MyUtils.toast(this, resources.getString(R.string.please_enter_your_ID_and_password))
+
+            progressView.hide()
             return
         }
 
@@ -65,6 +79,8 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
                     CoroutineScope(Dispatchers.Main).launch {
                         MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, user.uid)
                     }.invokeOnCompletion {
+                        progressView.hide()
+
                         Intent(this@AuthActivity, MemoListActivity::class.java).apply {
                             startActivity(this)
                         }
@@ -78,11 +94,15 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
 
     // # 카카오 계정 간편 로그인
     private fun kakaoSignIn() {
+        progressView.show()
+
         KakaoAPI.signIn(this, object : KakaoAPI.CallbackByAccessTokenInfo {
             override fun successCallback(accessTokenInfo: AccessTokenInfo?) {
                 CoroutineScope(Dispatchers.Main).launch {
                     MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, accessTokenInfo?.id.toString())
                 }.invokeOnCompletion {
+                    progressView.hide()
+
                     Intent(this@AuthActivity, MemoListActivity::class.java).apply {
                         startActivity(this)
                     }

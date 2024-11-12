@@ -1,8 +1,8 @@
 package app.solution.swing_by.api
 
-import app.solution.swing_by.LogType
-import app.solution.swing_by.MyApplication
-import app.solution.swing_by.MyUtils
+import app.solution.swing_by.root.LogType
+import app.solution.swing_by.root.MyApplication
+import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.constant.LocalDataConstant
 import com.google.android.gms.tasks.Task

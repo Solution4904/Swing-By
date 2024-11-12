@@ -7,18 +7,19 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <queries>
-
         <package android:name="net.daum.android.map" />
 
         <intent>
             <action android:name="android.intent.action.VIEW" />
+
             <category android:name="android.intent.category.BROWSABLE" />
+
             <data android:scheme="https" />
         </intent>
     </queries>
 
     <application
-        android:name=".MyApplication"
+        android:name=".root.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -28,6 +29,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Swing_By"
         tools:targetApi="34">
+        <activity
+            android:name=".common.ProgressDisplayManager"
+            android:exported="false" />
         <activity
             android:name=".feature.AuthActivity"
             android:exported="true">
@@ -55,18 +59,13 @@
         </activity>
         <activity android:name=".feature.SignUpActivity" />
         <activity android:name=".feature.MemoListActivity" />
-        <activity android:name=".feature.MapActivity" />
-
-        <!--KakaoMap NATIVE APP KEY-->
+        <activity android:name=".feature.MapActivity" /> <!-- KakaoMap NATIVE APP KEY -->
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
-            android:value="1cd12ba439971ae8db70eda0ffcf0119" />
-
-        <!--App Widget-->
+            android:value="1cd12ba439971ae8db70eda0ffcf0119" /> <!-- App Widget -->
         <receiver
             android:name=".MyAppWidgetProvider"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="app.solution.swing_by.ACTION_EVENT" />
@@ -76,7 +75,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_info" />
         </receiver>
-
     </application>
 
 </manifest>

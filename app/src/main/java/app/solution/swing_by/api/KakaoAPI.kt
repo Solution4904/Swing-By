@@ -1,11 +1,10 @@
 package app.solution.swing_by.api
 
 import android.content.Context
-import app.solution.swing_by.Document
-import app.solution.swing_by.KakaoAPIService
-import app.solution.swing_by.KeywordSerchingResultData
-import app.solution.swing_by.LogType
-import app.solution.swing_by.MyUtils
+import app.solution.swing_by.item.Document
+import app.solution.swing_by.item.KeywordSerchingResultData
+import app.solution.swing_by.root.LogType
+import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.constant.KakaoConstant
 import com.kakao.sdk.auth.model.OAuthToken
