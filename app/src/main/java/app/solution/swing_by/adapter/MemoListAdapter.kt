@@ -10,6 +10,7 @@ import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ItemMemoBinding
 import app.solution.swing_by.feature.WriteMemoActivity
 import app.solution.swing_by.item.MemoItem
+import app.solution.swing_by.root.MyUtils
 
 
 class MemoListAdapter(val onClick: ((MemoItem) -> Unit)) : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {
@@ -28,8 +29,10 @@ class MemoListAdapter(val onClick: ((MemoItem) -> Unit)) : ListAdapter<MemoItem,
     inner class ViewHolder(private val binding: ItemMemoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MemoItem) {
             with(binding) {
-                tvDescription.text = item.description
                 tvLocation.text = item.location
+                tvDescription.text = item.description
+                tvTime.text = item.currentTime!!.replace("-", "\n")
+
 
                 root.setOnClickListener {
                     val intent = Intent(it.context, WriteMemoActivity::class.java).apply {

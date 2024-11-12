@@ -6,4 +6,5 @@ data class MemoItem(
     val location: String? = null,
     val category: Int? = null,
     val categoryCode: String? = null,
+    val currentTime: String? = null,
 )
