@@ -6,11 +6,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
-import app.solution.swing_by.Document
+import app.solution.swing_by.item.Document
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.base.BaseActivity
+import app.solution.swing_by.common.ProgressView
 import app.solution.swing_by.constant.KakaoConstant
 import app.solution.swing_by.databinding.ActivityMapBinding
 import app.solution.swing_by.item.MemoItem
@@ -41,16 +42,22 @@ import com.kakao.vectormap.mapwidget.component.Orientation
 
 class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate) {
     private lateinit var kakaoMap: KakaoMap
-    private lateinit var kakaomapViewport:Rect
+    private lateinit var kakaomapViewport: Rect
     private lateinit var currentLatLng: LatLng
     private var labelLayer: LabelLayer? = null
     private var infoWindowLayer: InfoWindowLayer? = null
     private val labelDatas: MutableMap<String, LabelData> = mutableMapOf()
+    private val progressView: ProgressView by lazy {
+        ProgressView(this,this).create(this, this)
+    }
 
 
     override fun initView() {
         super.initView()
 
+        binding.root.addView(progressView).also {
+            progressView.show()
+        }
         setMap()
     }
 
@@ -66,7 +73,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
         binding.mapview.pause()
     }
 
-    private fun setMap(){
+    private fun setMap() {
         BottomSheetBehavior.from(binding.layoutBottomsheet.root).state = BottomSheetBehavior.STATE_HIDDEN
 
         binding.mapview.start(object : MapLifeCycleCallback() {
@@ -147,6 +154,8 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
                                     )
                                     labelDatas[index.place_name] = LabelData(index.place_name, memoItem.description!!, LatLng.from(index.y.toDouble(), index.x.toDouble()))
                                 }
+
+                                progressView.hide()
                             }
 
                             override fun failureCallback() {}

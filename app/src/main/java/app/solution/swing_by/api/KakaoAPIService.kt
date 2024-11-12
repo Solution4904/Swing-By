@@ -1,6 +1,7 @@
-package app.solution.swing_by
+package app.solution.swing_by.api
 
-import app.solution.swing_by.constant.KakaoConstant
+import app.solution.swing_by.BuildConfig
+import app.solution.swing_by.item.KeywordSerchingResultData
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

@@ -1,4 +1,4 @@
-package app.solution.swing_by
+package app.solution.swing_by.item
 
 import com.google.gson.annotations.SerializedName
 

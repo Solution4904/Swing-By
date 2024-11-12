@@ -3,7 +3,7 @@ package app.solution.swing_by.feature
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.solution.swing_by.MyUtils
+import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.adapter.MemoListAdapter
 import app.solution.swing_by.api.FirebaseAPI
