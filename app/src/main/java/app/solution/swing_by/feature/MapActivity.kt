@@ -48,7 +48,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
     private var infoWindowLayer: InfoWindowLayer? = null
     private val labelDatas: MutableMap<String, LabelData> = mutableMapOf()
     private val progressView: ProgressView by lazy {
-        ProgressView(this,this).create(this, this)
+        ProgressView(this, this).create(this, this)
     }
 
 
@@ -61,6 +61,12 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
         setMap()
     }
 
+    override fun initListener() {
+        super.initListener()
+
+        setButtons()
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -71,6 +77,12 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
         super.onPause()
 
         binding.mapview.pause()
+    }
+
+    private fun setButtons() {
+        binding.btnMyLocation.setOnClickListener {
+            getMyLocation()
+        }
     }
 
     private fun setMap() {
@@ -107,7 +119,7 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
                 override fun onPermissionGranted() {
 //                    Toast.makeText(this@MapActivity, "Permission Granted", Toast.LENGTH_SHORT).show()
 
-                    trackMyLocation()
+                    getMyLocation()
                 }
 
                 override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
@@ -125,15 +137,16 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
     }
 
     @SuppressLint("MissingPermission")
-    private fun trackMyLocation() {
+    private fun getMyLocation() {
         LocationServices.getFusedLocationProviderClient(this).apply {
             getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                 .addOnSuccessListener { result ->
                     result?.let {
                         currentLatLng = LatLng.from(result.latitude, result.longitude)
 
+                        moveToCurrentLocation()
                         searching()
-                        showSharingTransformLabel(currentLatLng)
+                        showSharingTransformLabel()
                     }
                 }
         }
@@ -170,10 +183,8 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
 
     private fun onInfoWindowClicked(labelId: String?) {
         if (labelDatas.containsKey(labelId)) {
-
             showDetailToLocation(labelId!!)
         }
-
     }
 
     private fun navigation(labelData: LabelData) {
@@ -231,21 +242,15 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
         return options
     }
 
-    private fun showSharingTransformLabel(latLng: LatLng) {
-        val pos = LatLng.from(latLng.latitude, latLng.longitude)
-
+    private fun showSharingTransformLabel() {
+        labelLayer!!.removeAll()
         labelLayer!!.addLabel(
-            LabelOptions.from(pos).setRank(101)
+            LabelOptions.from(currentLatLng).setRank(101)
                 .setStyles(
                     LabelStyle.from(R.drawable.current_location)
                         .setAnchorPoint(0.5f, 0.5f)
                         .setIconTransition(LabelTransition.from(Transition.None, Transition.None))
                 )
-        )
-
-        kakaoMap.moveCamera(
-            CameraUpdateFactory.newCenterPosition(pos, 17),
-            CameraAnimation.from(500, true, true)
         )
     }
 
@@ -262,6 +267,13 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
                 navigation(labelDatas[labelId]!!)
             }
         }
+    }
+
+    private fun moveToCurrentLocation() {
+        kakaoMap.moveCamera(
+            CameraUpdateFactory.newCenterPosition(currentLatLng, 17),
+            CameraAnimation.from(500, true, true)
+        )
     }
 }
 
