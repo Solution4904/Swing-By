@@ -68,24 +68,6 @@ class WriteMemoActivity : BaseActivity<ActivityWriteMemoBinding>(ActivityWriteMe
                 else -> ""
             },
             FirebaseConstant.DB_MEMO_CURRENT_TIME to MyUtils.getDateTime()
-
-            /*with(FirebaseConstant) {
-                DB_MEMO_UUID to memoUUID
-                DB_MEMO_DESCRIPTION to binding.etDescription.text.toString()
-                DB_MEMO_LOCATION to binding.etLocation.text.toString()
-                DB_MEMO_CATEGORY to binding.chipGroup.checkedChipId
-                DB_MEMO_CATEGORY_CODE to when (binding.chipGroup.checkedChipId) {
-                    2131230869 -> KakaoCategoryGroupCode.MT1
-                    2131230865 -> KakaoCategoryGroupCode.CS2
-                    2131230864 -> KakaoCategoryGroupCode.BK9
-                    2131230866 -> KakaoCategoryGroupCode.PO3
-                    2131230870 -> KakaoCategoryGroupCode.FD6
-                    2131230863 -> KakaoCategoryGroupCode.CE7
-                    2131230868 -> KakaoCategoryGroupCode.PM9
-                    else -> ""
-                }
-                DB_MEMO_CURRENT_TIME to System.currentTimeMillis().toString()
-            }*/
         )
 
         FirebaseAPI.registerMemo(memoUUID, memoModel, object : FirebaseAPI.Callback {
