@@ -30,9 +30,6 @@
         android:theme="@style/Theme.Swing_By"
         tools:targetApi="34">
         <activity
-            android:name=".common.ProgressDisplayManager"
-            android:exported="false" />
-        <activity
             android:name=".feature.AuthActivity"
             android:exported="true">
             <intent-filter>
