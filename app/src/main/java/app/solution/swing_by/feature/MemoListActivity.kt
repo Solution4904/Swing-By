@@ -44,11 +44,14 @@ class MemoListActivity : BaseActivity<ActivityMemoListBinding>(ActivityMemoListB
     private fun setMemoList() {
         val callback = object : FirebaseAPI.CallbackByDataSnapshot {
             override fun successCallback(results: DataSnapshot?) {
-                results?.let {
-                    val elements = it.children.map { snapshot ->
+                results?.let { result ->
+                    val elements = result.children.map { snapshot ->
                         snapshot.getValue(MemoItem::class.java)
                     }
-                    memoListAdapter.submitList(elements.toMutableList())
+                    memoListAdapter.submitList(
+                        elements.sortedBy {
+                            it!!.location
+                        })
                 }
             }
 
