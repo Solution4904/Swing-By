@@ -7,12 +7,17 @@ import app.solution.swing_by.root.LogType
 import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.R
 import app.solution.swing_by.constant.KakaoConstant
+import app.solution.swing_by.constant.LocalDataConstant
+import app.solution.swing_by.root.MyApplication
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
 import com.kakao.vectormap.LatLng
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -86,26 +91,35 @@ class KakaoAPI {
 
         // # 주변 키워드 검색
         fun searching(keyword: String, latLng: LatLng, categoryGroupCode: String, callback: CallbackByDocuments) {
-            val retrofitService = retrofit.create(KakaoAPIService::class.java)
-            retrofitService.getSerchingResult(query = keyword, x = latLng.longitude.toString(), y = latLng.latitude.toString(), categoryGroupCode = categoryGroupCode)
-                .enqueue(object : Callback<KeywordSerchingResultData> {
-                    override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
-                        MyUtils.log(detail = "${p1.body()!!.documents}")
+            CoroutineScope(Dispatchers.Main).launch {
+                val retrofitService = retrofit.create(KakaoAPIService::class.java)
+                retrofitService.getSerchingResult(
+                    query = keyword,
+                    x = latLng.longitude.toString(),
+                    y = latLng.latitude.toString(),
+                    size = MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.OPTION_SEARCHING_LIMIT, "3").toInt(),
+                    radius = MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.OPTION_SEARCHING_DISTANCE, "500").toInt(),
+                    categoryGroupCode = categoryGroupCode
+                )
+                    .enqueue(object : Callback<KeywordSerchingResultData> {
+                        override fun onResponse(p0: Call<KeywordSerchingResultData>, p1: Response<KeywordSerchingResultData>) {
+                            MyUtils.log(detail = "${p1.body()!!.documents}")
 
-                        val nearbySerchResults = ArrayList<Document>()
+                            val nearbySerchResults = ArrayList<Document>()
 
-                        for (document in p1.body()!!.documents) {
-                            nearbySerchResults.add(document)
+                            for (document in p1.body()!!.documents) {
+                                nearbySerchResults.add(document)
+                            }
+
+                            callback.successCallback(nearbySerchResults.toTypedArray())
                         }
 
-                        callback.successCallback(nearbySerchResults.toTypedArray())
-                    }
-
-                    override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
-                        callback.failureCallback()
-                        MyUtils.log(LogType.ERROR, p1.stackTrace.toString())
-                    }
-                })
+                        override fun onFailure(p0: Call<KeywordSerchingResultData>, p1: Throwable) {
+                            callback.failureCallback()
+                            MyUtils.log(LogType.ERROR, p1.stackTrace.toString())
+                        }
+                    })
+            }
         }
     }
 }

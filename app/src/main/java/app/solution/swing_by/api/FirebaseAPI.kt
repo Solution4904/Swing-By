@@ -123,6 +123,38 @@ class FirebaseAPI {
                     }
                 }
         }
+
+        // 회원 탈퇴
+        fun deleteAccount(callback: Callback) {
+            FirebaseAuth.currentUser?.let { user ->
+                FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(user.uid).removeValue()
+                    .addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            user.delete().continueWith { task ->
+                                if (task.isSuccessful) {
+                                    MyUtils.log(detail = "success")
+
+                                    callback.successCallback()
+                                } else {
+                                    MyUtils.log(detail = "canceled")
+
+                                    callback.failureCallback()
+                                }
+                            }
+                        } else {
+                            MyUtils.log(detail = "failure")
+
+                            callback.failureCallback()
+                        }
+                    }
+
+            }
+        }
+
+        // 로그아웃
+        fun logout() {
+            FirebaseAuth.signOut()
+        }
     }
 }
 

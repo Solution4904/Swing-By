@@ -56,7 +56,10 @@
         </activity>
         <activity android:name=".feature.SignUpActivity" />
         <activity android:name=".feature.MemoListActivity" />
-        <activity android:name=".feature.MapActivity" /> <!-- KakaoMap NATIVE APP KEY -->
+        <activity android:name=".feature.OptionActivity" />
+        <activity android:name=".feature.MapActivity" />
+
+        <!-- KakaoMap NATIVE APP KEY -->
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
             android:value="1cd12ba439971ae8db70eda0ffcf0119" /> <!-- App Widget -->

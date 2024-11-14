@@ -13,7 +13,7 @@ interface KakaoAPIService {
     fun getSerchingResult(
         @Header("Authorization") authorization: String = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}",
         @Query("sort") sort: String = "distance",
-        @Query("radius") radius: Int = 5000,
+        @Query("radius") radius: Int = 500,
         @Query("size") size: Int = 3,
         @Query("x") x: String,
         @Query("y") y: String,

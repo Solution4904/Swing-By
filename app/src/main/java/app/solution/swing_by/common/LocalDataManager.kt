@@ -20,7 +20,7 @@ class LocalDataManager(private val context: Context) {
         }
     }
 
-    suspend fun getString(key: String): String {
+    suspend fun getString(key: String, defalut:String = ""): String {
         return context.dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
@@ -29,7 +29,7 @@ class LocalDataManager(private val context: Context) {
                     throw exception
                 }
             }.map { preference ->
-                preference[stringPreferencesKey(key)] ?: ""
+                preference[stringPreferencesKey(key)] ?: defalut
             }.first()
     }
 }

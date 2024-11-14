@@ -2,6 +2,8 @@ package app.solution.swing_by.feature
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.view.Menu
+import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.solution.swing_by.root.MyUtils
 import app.solution.swing_by.R
@@ -17,6 +19,12 @@ class MemoListActivity : BaseActivity<ActivityMemoListBinding>(ActivityMemoListB
     private lateinit var memoListAdapter: MemoListAdapter
 
 
+    override fun initView() {
+        super.initView()
+
+        setActionBar()
+    }
+
     override fun initListener() {
         super.initListener()
 
@@ -27,6 +35,31 @@ class MemoListActivity : BaseActivity<ActivityMemoListBinding>(ActivityMemoListB
         super.refreshView()
 
         setMemoList()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.actionbar, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_search -> {}
+            R.id.menu_option -> {
+                Intent(this@MemoListActivity, OptionActivity::class.java).apply {
+                    startActivity(this)
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setActionBar() {
+        setSupportActionBar(binding.toolbar)
+
+        supportActionBar?.setDisplayShowTitleEnabled(false) //액션바에 표시되는 제목의 표시유무를 설정합니다. false로 해야 custom한 툴바의 이름이 화면에 보이게 됩니다.
     }
 
     // # 버튼 이벤트 추가
