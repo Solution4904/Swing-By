@@ -150,6 +150,11 @@ class FirebaseAPI {
 
             }
         }
+
+        // 로그아웃
+        fun logout() {
+            FirebaseAuth.signOut()
+        }
     }
 }
 

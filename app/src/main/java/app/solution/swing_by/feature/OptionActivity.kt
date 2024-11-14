@@ -1,6 +1,7 @@
 package app.solution.swing_by.feature
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.base.BaseActivity
@@ -48,7 +49,7 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
             }
 
             btnLogout.setOnClickListener {
-
+                logout()
             }
         }
     }
@@ -81,7 +82,11 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
                 .setPositiveButton("확인") { dialog, id ->
                     FirebaseAPI.deleteAccount(object : FirebaseAPI.Callback {
                         override fun successCallback() {
-                            finish()
+                            finishAffinity()
+
+                            Intent(this@OptionActivity, AuthActivity::class.java).apply {
+                                startActivity(this)
+                            }
                         }
 
                         override fun failureCallback() {}
@@ -91,6 +96,18 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
                     dialog.dismiss()
                 }
             show()
+        }
+    }
+
+    private fun logout() {
+        CoroutineScope(Dispatchers.Main).launch {
+            MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, "")
+        }
+
+        finishAffinity()
+
+        Intent(this@OptionActivity, AuthActivity::class.java).apply {
+            startActivity(this)
         }
     }
 }
