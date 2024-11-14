@@ -1,6 +1,8 @@
 package app.solution.swing_by.feature
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
+import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.databinding.ActivityOptionBinding
@@ -34,15 +36,15 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
     private fun setButtons() {
         with(binding) {
             layoutSearchingLimit.setOnClickListener {
-                dialog("겸색 갯수", arrayOf("1개", "3개", "5개"))
+                showSelectDialog("겸색 갯수", arrayOf("1개", "3개", "5개"))
             }
 
             layoutSearchingDistance.setOnClickListener {
-                dialog("겸색 거리", arrayOf("500m", "1000m", "2000m"))
+                showSelectDialog("겸색 거리", arrayOf("500m", "1000m", "2000m"))
             }
 
             btnAccountDelete.setOnClickListener {
-
+                showConfirmDialog()
             }
 
             btnLogout.setOnClickListener {
@@ -51,7 +53,7 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
         }
     }
 
-    private fun dialog(title: String, items: Array<String>) {
+    private fun showSelectDialog(title: String, items: Array<String>) {
         AlertDialog.Builder(this).run {
             setTitle(title)
             setItems(items) { p0, p1 ->
@@ -68,6 +70,26 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
                 }
             }
             setNegativeButton("취소", null)
+            show()
+        }
+    }
+
+    private fun showConfirmDialog() {
+        AlertDialog.Builder(this@OptionActivity).apply {
+            setTitle("회원탈퇴")
+                .setMessage("탈퇴 시 데이터는 복구 되지 않습니다.")
+                .setPositiveButton("확인") { dialog, id ->
+                    FirebaseAPI.deleteAccount(object : FirebaseAPI.Callback {
+                        override fun successCallback() {
+                            finish()
+                        }
+
+                        override fun failureCallback() {}
+                    })
+                }
+                .setNegativeButton("취소") { dialog, id ->
+                    dialog.dismiss()
+                }
             show()
         }
     }
