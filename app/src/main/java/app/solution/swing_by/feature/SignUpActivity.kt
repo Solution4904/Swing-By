@@ -7,8 +7,6 @@ import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.databinding.ActivitySignupBinding
 
 class SignUpActivity : BaseActivity<ActivitySignupBinding>(ActivitySignupBinding::inflate) {
-
-
     override fun initListener() {
         super.initListener()
 
@@ -25,10 +23,29 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>(ActivitySignupBinding
 
     // # 이메일 가입
     private fun signUp() {
+        fun checkEmail(email: String): Boolean {
+            if (email.contains("@")
+                && email.length > 5
+            ) {
+                return true
+            } else {
+                MyUtils.toast(this@SignUpActivity, "올바른 이메일 아이디를 입력해주세요")
+                return false
+            }
+        }
+
+        fun checkPassword(password: String): Boolean {
+            if (password.length >= 6) return true
+            else {
+                MyUtils.toast(this@SignUpActivity, "비밀번호는 6글자 이상이어야 합니다")
+                return false
+            }
+        }
+
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
-        if (email.isEmpty() || password.isEmpty()) {
+        if (checkEmail(email) && checkPassword(password)) {
             MyUtils.toast(this, resources.getString(R.string.please_enter_your_ID_and_password))
             return
         }
