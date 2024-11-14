@@ -2,7 +2,9 @@ package app.solution.swing_by.feature
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.constant.LocalDataConstant
@@ -16,6 +18,7 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
     override fun initView() {
         super.initView()
 
+        setActionBar()
         setDatas()
     }
 
@@ -23,6 +26,26 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
         super.initListener()
 
         setButtons()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setActionBar() {
+        setSupportActionBar(binding.toolbar)
+
+        with(supportActionBar!!) {
+            title = "옵션"
+            setDisplayHomeAsUpEnabled(true)    //왼쪽 버튼 사용설정(기본은 뒤로가기)
+            setDisplayShowTitleEnabled(true)        //타이틀 보이게 설정
+            setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
+        }
     }
 
     private fun setDatas() {
