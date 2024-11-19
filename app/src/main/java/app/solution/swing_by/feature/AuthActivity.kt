@@ -88,7 +88,9 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
                 }
             }
 
-            override fun failureCallback() {}
+            override fun failureCallback() {
+                progressView.hide()
+            }
         })
     }
 
@@ -109,7 +111,9 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
                 }
             }
 
-            override fun failureCallback() {}
+            override fun failureCallback() {
+                progressView.hide()
+            }
         })
     }
 }
