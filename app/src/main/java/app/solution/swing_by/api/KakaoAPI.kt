@@ -9,9 +9,11 @@ import app.solution.swing_by.R
 import app.solution.swing_by.constant.KakaoConstant
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.root.MyApplication
+import com.kakao.sdk.auth.AuthApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.model.AccessTokenInfo
 import com.kakao.vectormap.LatLng
@@ -45,6 +47,33 @@ class KakaoAPI {
                 .build()
         }
 
+        fun checkToken(context: Context, callBack: CallbackByAccessTokenInfo? = null) {
+            if (AuthApiClient.instance.hasToken()) {
+                UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+                    if (error != null) {
+                        if (error is KakaoSdkError && error.isInvalidTokenError()) {
+                            //로그인 필요
+                            signIn(context, callBack)
+                        }
+                        else {
+                            //기타 에러
+                            callBack?.failureCallback()
+                            MyUtils.log(logType = LogType.ERROR, detail = error.toString())
+                        }
+                    }
+                    else {
+                        //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
+                        UserApiClient.instance.me { _, _ ->
+                            callBack?.successCallback(tokenInfo)
+                        }
+                    }
+                }
+            }
+            else {
+                //로그인 필요
+                signIn(context, callBack)
+            }
+        }
 
         // 로그인
         fun signIn(context: Context, callBack: CallbackByAccessTokenInfo? = null) {
@@ -86,6 +115,17 @@ class KakaoAPI {
                 }
             } else {
                 UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+            }
+        }
+
+        // # 로그아웃
+        fun logout() {
+            UserApiClient.instance.logout { error ->
+                if (error != null) {
+                    MyUtils.log(logType = LogType.ERROR, detail = "로그아웃 실패. SDK에서 토큰 삭제됨\n$error")
+                } else {
+                    MyUtils.log(logType = LogType.ERROR, detail = "로그아웃 성공. SDK에서 토큰 삭제됨")
+                }
             }
         }
 
