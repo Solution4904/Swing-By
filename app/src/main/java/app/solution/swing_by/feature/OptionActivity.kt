@@ -1,12 +1,13 @@
 package app.solution.swing_by.feature
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
+import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.base.BaseActivity
+import app.solution.swing_by.constant.ACCOUNT_TYPE
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.databinding.ActivityOptionBinding
 import app.solution.swing_by.root.MyApplication
@@ -99,21 +100,28 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
     }
 
     private fun showConfirmDialog() {
+        val callback = object : FirebaseAPI.Callback {
+            override fun successCallback() {
+                Intent(this@OptionActivity, AuthActivity::class.java).apply {
+                    finishAffinity()
+                    startActivity(this)
+                }
+            }
+
+            override fun failureCallback() {}
+        }
+
         AlertDialog.Builder(this@OptionActivity).apply {
             setTitle("회원탈퇴")
                 .setMessage("탈퇴 시 데이터는 복구 되지 않습니다.")
                 .setPositiveButton("확인") { dialog, id ->
-                    FirebaseAPI.deleteAccount(object : FirebaseAPI.Callback {
-                        override fun successCallback() {
-                            finishAffinity()
-
-                            Intent(this@OptionActivity, AuthActivity::class.java).apply {
-                                startActivity(this)
-                            }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        when (MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.ACCOUNT_TYPE)) {
+                            ACCOUNT_TYPE.EMAIL.toString() -> FirebaseAPI.deleteAccount(callback)
+                            ACCOUNT_TYPE.KAKAO.toString() -> FirebaseAPI.deleteSNSAccount(callback)
                         }
-
-                        override fun failureCallback() {}
-                    })
+                        MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, "")
+                    }
                 }
                 .setNegativeButton("취소") { dialog, id ->
                     dialog.dismiss()
@@ -124,12 +132,19 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
 
     private fun logout() {
         CoroutineScope(Dispatchers.Main).launch {
-            MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, "")
+            with(MyApplication.getInstance().getLocalDataManager()) {
+                setString(LocalDataConstant.UID, "")
+
+                when (getString(LocalDataConstant.ACCOUNT_TYPE)) {
+                    ACCOUNT_TYPE.EMAIL.toString() -> FirebaseAPI.logout()
+                    ACCOUNT_TYPE.KAKAO.toString() -> KakaoAPI.logout()
+                }
+            }
         }
 
-        finishAffinity()
 
         Intent(this@OptionActivity, AuthActivity::class.java).apply {
+            finishAffinity()
             startActivity(this)
         }
     }

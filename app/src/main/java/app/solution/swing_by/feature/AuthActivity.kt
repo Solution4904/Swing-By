@@ -9,7 +9,9 @@ import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.common.ProgressView
+import app.solution.swing_by.constant.ACCOUNT_TYPE
 import app.solution.swing_by.databinding.ActivityAuthBinding
+import app.solution.swing_by.root.LogType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.kakao.sdk.user.model.AccessTokenInfo
@@ -28,6 +30,12 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
         super.initView()
 
         binding.root.addView(progressView)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            progressView.show()
+
+            hasLoggedInBefore()
+        }
     }
 
     override fun initListener() {
@@ -57,32 +65,63 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
         }
     }
 
+    // # 로그인 이력 확인
+    private suspend fun hasLoggedInBefore() {
+        if (MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.UID).isNotBlank()) {
+            MyUtils.log(LogType.ERROR, MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.ACCOUNT_TYPE))
+            when (MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.ACCOUNT_TYPE)) {
+                ACCOUNT_TYPE.EMAIL.toString() -> {
+                    emailSignIn(
+                        AuthData(
+                            MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.ID),
+                            MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.PASSWORD)
+                        )
+                    )
+                }
+
+                ACCOUNT_TYPE.KAKAO.toString() -> {
+                    kakaoSignIn()
+                }
+            }
+        } else {
+            progressView.hide()
+        }
+    }
+
+
     // # 이메일 계정 로그인
-    private fun emailSignIn() {
+    private fun emailSignIn(authData: AuthData? = null) {
         progressView.show()
 
-        val email = binding.etEmail.text.toString()
-        val password = binding.etPassword.text.toString()
+        val _authData = authData ?: AuthData(binding.etEmail.text.toString(), binding.etPassword.text.toString())
 
-        if (email.isEmpty() || password.isEmpty()) {
+        if (authData == null && _authData.id.isEmpty() ||
+            authData == null && _authData.password.isEmpty()
+        ) {
             MyUtils.toast(this, resources.getString(R.string.please_enter_your_ID_and_password))
 
             progressView.hide()
             return
         }
 
-        FirebaseAPI.signIn(email, password, object : FirebaseAPI.CallbackByAuthResult {
+        FirebaseAPI.signIn(_authData.id, _authData.password, object : FirebaseAPI.CallbackByAuthResult {
             override fun successCallback(results: Task<AuthResult>) {
                 val currentUser = results.result.user
 
                 currentUser?.let { user ->
                     CoroutineScope(Dispatchers.Main).launch {
-                        MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, user.uid)
-                    }.invokeOnCompletion {
-                        progressView.hide()
+                        if (MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.UID).isBlank())
+                            with(MyApplication.getInstance().getLocalDataManager()) {
+                                setString(LocalDataConstant.UID, user.uid)
+                                setString(LocalDataConstant.ID, _authData.id)
+                                setString(LocalDataConstant.PASSWORD, _authData.password)
+                                setString(LocalDataConstant.ACCOUNT_TYPE, ACCOUNT_TYPE.EMAIL.toString())
+                            }
 
+                    }.invokeOnCompletion {
                         Intent(this@AuthActivity, MemoListActivity::class.java).apply {
                             startActivity(this)
+                            finish()
                         }
                     }
                 }
@@ -101,12 +140,15 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
         KakaoAPI.signIn(this, object : KakaoAPI.CallbackByAccessTokenInfo {
             override fun successCallback(accessTokenInfo: AccessTokenInfo?) {
                 CoroutineScope(Dispatchers.Main).launch {
+                    with(MyApplication.getInstance().getLocalDataManager()) {
+                        setString(LocalDataConstant.UID, accessTokenInfo?.id.toString())
+                        setString(LocalDataConstant.ACCOUNT_TYPE, ACCOUNT_TYPE.KAKAO.toString())
+                    }
                     MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, accessTokenInfo?.id.toString())
                 }.invokeOnCompletion {
-                    progressView.hide()
-
                     Intent(this@AuthActivity, MemoListActivity::class.java).apply {
                         startActivity(this)
+                        finish()
                     }
                 }
             }
@@ -117,3 +159,8 @@ class AuthActivity : BaseActivity<ActivityAuthBinding>(ActivityAuthBinding::infl
         })
     }
 }
+
+data class AuthData(
+    val id: String,
+    val password: String,
+)

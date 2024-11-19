@@ -77,7 +77,7 @@ class FirebaseAPI {
                             callback?.successCallback()
                         } else {
                             callback?.failureCallback()
-                            MyUtils.log(logType = LogType.ERROR, detail = "registerMemo: ${it.exception?.stackTrace}")
+                            MyUtils.log(logType = LogType.ERROR, detail = "registerMemo: ${it.exception?.message}")
                         }
                     }
             }
@@ -148,6 +148,24 @@ class FirebaseAPI {
                         }
                     }
 
+            }
+        }
+
+        // 연동 계정 탈퇴
+        fun deleteSNSAccount(callback: Callback) {
+            CoroutineScope(Dispatchers.Main).launch {
+                FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.UID)).removeValue()
+                    .addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            MyUtils.log(detail = "success")
+
+                            callback.successCallback()
+                        } else {
+                            MyUtils.log(detail = "failure")
+
+                            callback.failureCallback()
+                        }
+                    }
             }
         }
 

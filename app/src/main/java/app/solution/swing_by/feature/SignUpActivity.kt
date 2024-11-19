@@ -45,8 +45,7 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>(ActivitySignupBinding
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
 
-        if (checkEmail(email) && checkPassword(password)) {
-            MyUtils.toast(this, resources.getString(R.string.please_enter_your_ID_and_password))
+        if (!checkEmail(email) || !checkPassword(password)) {
             return
         }
 

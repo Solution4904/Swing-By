@@ -10,6 +10,7 @@ import app.solution.swing_by.R
 import app.solution.swing_by.adapter.MemoListAdapter
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.base.BaseActivity
+import app.solution.swing_by.common.ProgressView
 import app.solution.swing_by.databinding.ActivityMemoListBinding
 import app.solution.swing_by.item.MemoItem
 import com.google.firebase.database.DataSnapshot
@@ -17,7 +18,9 @@ import com.google.firebase.database.DataSnapshot
 
 class MemoListActivity : BaseActivity<ActivityMemoListBinding>(ActivityMemoListBinding::inflate) {
     private lateinit var memoListAdapter: MemoListAdapter
-
+    private val progressView: ProgressView by lazy {
+        ProgressView(this, this).create(this, this)
+    }
 
     override fun initView() {
         super.initView()
@@ -35,6 +38,8 @@ class MemoListActivity : BaseActivity<ActivityMemoListBinding>(ActivityMemoListB
         super.refreshView()
 
         setMemoList()
+
+        progressView.hide()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
