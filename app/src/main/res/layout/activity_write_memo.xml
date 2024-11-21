@@ -75,59 +75,75 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_miscellaneous"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="대형마트" />
+            android:text="대형마트"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_cosmetic"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="편의점" />
+            android:text="편의점"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_clothes"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="은행" />
+            android:text="은행"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_errands"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="공공기관" />
+            android:text="공공기관"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_restaurant"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="음식점" />
+            android:text="음식점"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_bank"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="카페" />
+            android:text="카페"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_mart"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="약국" />
+            android:text="약국"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_etc"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/CustomChipChoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="기타" />
+            android:text="기타"
+            app:chipStrokeColor="@color/personalBlack"
+            app:chipStrokeWidth="1dp" />
 
     </com.google.android.material.chip.ChipGroup>
 

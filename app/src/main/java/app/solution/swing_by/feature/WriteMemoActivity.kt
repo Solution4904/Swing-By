@@ -1,6 +1,5 @@
 package app.solution.swing_by.feature
 
-import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.text.Spannable
@@ -10,7 +9,7 @@ import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.core.text.toSpanned
+import androidx.core.view.forEach
 import androidx.core.view.get
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
@@ -25,7 +24,6 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAlign
 import com.skydoves.balloon.BalloonAnimation
-import com.skydoves.balloon.BalloonCenterAlign
 import com.skydoves.balloon.BalloonSizeSpec
 import java.util.UUID
 
