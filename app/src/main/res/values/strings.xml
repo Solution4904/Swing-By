@@ -13,4 +13,6 @@
     <string name="memo_deleted">메모가 삭제되었습니다</string>
     <string name="memo_deleted_cancel">제거가 취소되었습니다</string>
     <string name="please_wait">잠시만 기다려주세요</string>
+    <string name="location_tooltip">장소 이름에 입력되는 텍스트를 기준으로 검색이 이루어집니다. 때문에 상호명이 아닌 지점명과 같은 다른 지점과 동일하지 않은 이름으로 입력 시 원활한 탐색이 어려울 수 있습니다.\n\n예시) 다이소\n아성다이소 (X)\n다이소 화성송산점 (X)\nDAISO (X)\n(주)다이소 (X)\n…"</string>
+    <string name="category_tooltip">장소 검색 시 카테고리에 따라 필터링된 결과 값을 받아옵니다. \n만약 장소 명이 정확하더라도 카테고리가 다르다면 검색되지 않습니다. \n정확한 카테고리를 모른다면 선택하지 않는 것이 좋을 수 있습니다."</string>
 </resources>
