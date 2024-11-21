@@ -82,6 +82,9 @@ dependencies {
     /* DataStore */
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    /* Tooltip */
+    implementation("com.github.skydoves:balloon:1.6.11")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

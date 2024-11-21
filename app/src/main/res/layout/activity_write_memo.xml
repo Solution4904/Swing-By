@@ -2,144 +2,159 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:text="장소 이름"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:padding="12dp">
+    <EditText
+        android:id="@+id/et_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:hint="장소 이름을 입력해주세요"
+        app:layout_constraintEnd_toStartOf="@id/btn_location_tooltip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:text="장소 이름"
-                android:textSize="24sp" />
+    <ImageButton
+        android:id="@+id/btn_location_tooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/transparent"
+        android:src="@drawable/baseline_help_24"
+        app:layout_constraintBottom_toBottomOf="@id/tv_location"
+        app:layout_constraintStart_toEndOf="@+id/tv_location"
+        app:layout_constraintTop_toTopOf="@+id/tv_location" />
 
-            <EditText
-                android:id="@+id/et_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="장소 이름을 입력해주세요" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:text="장소 이름 입력 시 주의 사항\n\n'장소 이름'에 입력되는 텍스트를 기준으로 검색이 이루어집니다. 때문에 상호명이 아닌 지점명과 같은 다른 지점과 동일하지 않은 이름으로 입력 시 원활한 탐색이 어려울 수 있습니다.\n\n예시) 다이소\n아성다이소(X), 다이소 화성송산점(X), DAISO(X), (주)다이소(X)..." />
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="카테고리"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guide01" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:layout_marginVertical="8dp"
-                android:background="@color/personalGray" />
+    <ImageButton
+        android:id="@+id/btn_category_tooltip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/transparent"
+        android:src="@drawable/baseline_help_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_category"
+        app:layout_constraintStart_toEndOf="@+id/tv_category"
+        app:layout_constraintTop_toTopOf="@+id/tv_category" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="카테고리"
-                android:textSize="24sp" />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_category"
+        app:singleSelection="true">
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_miscellaneous"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대형마트" />
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="10dp"
-                    app:singleSelection="true">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_cosmetic"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="편의점" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_miscellaneous"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="대형마트" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_clothes"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="은행" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_cosmetic"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="편의점" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_errands"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="공공기관" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_clothes"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="은행" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_restaurant"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="음식점" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_errands"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="공공기관" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_bank"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카페" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_restaurant"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="음식점" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_mart"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="약국" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_bank"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="카페" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_etc"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기타" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_mart"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="약국" />
+    </com.google.android.material.chip.ChipGroup>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_etc"
-                        style="@style/Widget.MaterialComponents.Chip.Choice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="기타" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.48" />
 
-                </com.google.android.material.chip.ChipGroup>
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="내용"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guide02" />
 
-            </HorizontalScrollView>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:text="장소 검색 시 카테고리에 따라 필터링된 결과 값을 받아옵니다. \n만약 장소 명이 정확하더라도 카테고리가 다르다면 검색되지 않습니다. \n정확한 카테고리를 모를 경우 선택하지 않으면 됩니다."
-                    android:layout_marginVertical="16dp"
-                    android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="내용"
-                android:textSize="24sp" />
-
-            <EditText
-                android:id="@+id/et_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="내용을 입력해주세요" />
-        </LinearLayout>
-    </ScrollView>
+    <EditText
+        android:id="@+id/et_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="내용을 입력해주세요"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
     <Button
         android:id="@+id/btn_confirm"
