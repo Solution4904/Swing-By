@@ -5,14 +5,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import app.solution.swing_by.R
 
 class ProgressView @JvmOverloads constructor(
     context: Context,
-    private val activity: Activity,
+    activity: Activity,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
@@ -36,15 +35,15 @@ class ProgressView @JvmOverloads constructor(
     fun show() {
         this.visibility = VISIBLE
 
-        activity.window.setFlags(
+        /*activity.window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-        )
+        )*/
     }
 
     fun hide() {
         this.visibility = GONE
 
-        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+//        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 }

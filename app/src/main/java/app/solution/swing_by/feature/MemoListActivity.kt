@@ -50,7 +50,12 @@ class MemoListActivity : BaseActivity<ActivityMemoListBinding>(ActivityMemoListB
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_search -> {}
+            R.id.menu_explore -> {
+                Intent(this@MemoListActivity, MapActivity::class.java).apply {
+                    startActivity(this)
+                }
+            }
+
             R.id.menu_option -> {
                 Intent(this@MemoListActivity, OptionActivity::class.java).apply {
                     startActivity(this)

@@ -5,7 +5,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.icu.text.DecimalFormat
 import android.net.Uri
+import android.view.MotionEvent
+import android.view.TouchDelegate
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import app.solution.swing_by.item.Document
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
@@ -165,10 +171,17 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
                                     infoWindowLayer?.addInfoWindow(
                                         getComplexLayout(index)
                                     )
-                                    labelDatas[index.place_name] = LabelData(index.place_name, memoItem.description!!, LatLng.from(index.y.toDouble(), index.x.toDouble()))
+                                    labelDatas[index.place_name] = LabelData(
+                                        locationName = index.place_name,
+                                        description = memoItem.description!!,
+                                        latLng = LatLng.from(index.y.toDouble(), index.x.toDouble()),
+                                        distance = index.distance
+                                    )
                                 }
 
-                                progressView.hide()
+                                binding.root.removeView(progressView).also {
+                                    progressView.hide()
+                                }
                             }
 
                             override fun failureCallback() {}
@@ -257,10 +270,12 @@ class MapActivity : BaseActivity<ActivityMapBinding>(ActivityMapBinding::inflate
     private fun showDetailToLocation(labelId: String) {
         with(binding.layoutBottomsheet) {
             tvLocationName.text = labelDatas[labelId]!!.locationName
+            tvDistance.text = "${DecimalFormat("#,###").format(labelDatas[labelId]!!.distance.toInt())}m"
             tvMemoDescription.text = labelDatas[labelId]!!.description
 
             BottomSheetBehavior.from(root).peekHeight = kakaomapViewport.height() / 2
             BottomSheetBehavior.from(root).state = BottomSheetBehavior.STATE_COLLAPSED
+            BottomSheetBehavior.from(root).isDraggable = true
             setVisible(true)
 
             btnNavi.setOnClickListener {
@@ -281,4 +296,5 @@ data class LabelData(
     val locationName: String,
     val description: String,
     val latLng: LatLng,
+    val distance: String,
 )
