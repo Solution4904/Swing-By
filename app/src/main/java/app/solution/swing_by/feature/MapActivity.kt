@@ -7,11 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.icu.text.DecimalFormat
 import android.net.Uri
-import android.view.MotionEvent
-import android.view.TouchDelegate
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import app.solution.swing_by.item.Document
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI

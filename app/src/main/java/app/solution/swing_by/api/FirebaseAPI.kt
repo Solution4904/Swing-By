@@ -35,8 +35,8 @@ class FirebaseAPI {
     }
 
     companion object {
-        private val FirebaseDatabase = Firebase.database.reference
         private val FirebaseAuth = Firebase.auth
+        private val FirebaseDatabase = Firebase.database.reference
 
 
         // 로그인 중인 계정의 UID 불러오기
@@ -91,35 +91,38 @@ class FirebaseAPI {
                         if (it.isSuccessful) {
                             callback?.successCallback()
                         } else {
-                            callback?.failureCallback()
                             MyUtils.log(logType = LogType.ERROR, detail = "deleteMemo: ${it.exception?.stackTrace}")
+
+                            callback?.failureCallback()
                         }
                     }
             }
         }
 
-        // 이메일 로그인
+        // # 로그인
         fun signIn(email: String, password: String, callback: CallbackByAuthResult? = null) {
             FirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         callback?.successCallback(it)
                     } else {
-                        callback?.failureCallback()
                         MyUtils.log(detail = "signIn: ${it.exception?.stackTrace}")
+
+                        callback?.failureCallback()
                     }
                 }
         }
 
-        // 이메일 가입
+        // # 가입
         fun signUp(email: String, password: String, callback: Callback? = null) {
             FirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         callback?.successCallback()
                     } else {
-                        callback?.failureCallback()
                         MyUtils.log(detail = "signUp: ${it.exception?.stackTrace}")
+
+                        callback?.failureCallback()
                     }
                 }
         }
@@ -151,28 +154,9 @@ class FirebaseAPI {
             }
         }
 
-        // 연동 계정 탈퇴
-        fun deleteSNSAccount(callback: Callback) {
-            CoroutineScope(Dispatchers.Main).launch {
-                FirebaseDatabase.child(FirebaseConstant.DB_MEMOLIST).child(MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.UID)).removeValue()
-                    .addOnCompleteListener { result ->
-                        if (result.isSuccessful) {
-                            MyUtils.log(detail = "success")
-
-                            callback.successCallback()
-                        } else {
-                            MyUtils.log(detail = "failure")
-
-                            callback.failureCallback()
-                        }
-                    }
-            }
-        }
-
         // 로그아웃
         fun logout() {
             FirebaseAuth.signOut()
         }
     }
 }
-
