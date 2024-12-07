@@ -10,7 +10,6 @@ import app.solution.swing_by.constant.FirebaseConstant
 import app.solution.swing_by.databinding.ItemMemoBinding
 import app.solution.swing_by.feature.WriteMemoActivity
 import app.solution.swing_by.item.MemoItem
-import app.solution.swing_by.root.MyUtils
 
 
 class MemoListAdapter(val onClick: ((MemoItem) -> Unit)) : ListAdapter<MemoItem, MemoListAdapter.ViewHolder>(differ) {

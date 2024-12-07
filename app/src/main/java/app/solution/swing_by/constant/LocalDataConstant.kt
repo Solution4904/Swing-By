@@ -6,14 +6,8 @@ class LocalDataConstant {
         const val UID = "UID"
         const val ID = "ID"
         const val PASSWORD = "PASSWORD"
-        const val ACCOUNT_TYPE = "ACCOUNT_TYPE"
 
         const val OPTION_SEARCHING_LIMIT = "OPTION_SEARCHING_LIMIT"
         const val OPTION_SEARCHING_DISTANCE = "OPTION_SEARCHING_DISTANCE"
     }
-}
-
-enum class ACCOUNT_TYPE {
-    EMAIL,
-    KAKAO,
 }

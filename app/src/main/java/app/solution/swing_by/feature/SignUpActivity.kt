@@ -1,7 +1,6 @@
 package app.solution.swing_by.feature
 
 import app.solution.swing_by.root.MyUtils
-import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
 import app.solution.swing_by.base.BaseActivity
 import app.solution.swing_by.databinding.ActivitySignupBinding
@@ -25,6 +24,7 @@ class SignUpActivity : BaseActivity<ActivitySignupBinding>(ActivitySignupBinding
     private fun signUp() {
         fun checkEmail(email: String): Boolean {
             if (email.contains("@")
+                && email.contains(".")
                 && email.length > 5
             ) {
                 return true

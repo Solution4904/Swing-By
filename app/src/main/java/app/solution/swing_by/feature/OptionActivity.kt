@@ -5,9 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
-import app.solution.swing_by.api.KakaoAPI
 import app.solution.swing_by.base.BaseActivity
-import app.solution.swing_by.constant.ACCOUNT_TYPE
 import app.solution.swing_by.constant.LocalDataConstant
 import app.solution.swing_by.databinding.ActivityOptionBinding
 import app.solution.swing_by.root.MyApplication
@@ -116,17 +114,13 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
                 .setMessage("탈퇴 시 데이터는 복구 되지 않습니다.")
                 .setPositiveButton("확인") { dialog, id ->
                     CoroutineScope(Dispatchers.Main).launch {
-                        when (MyApplication.getInstance().getLocalDataManager().getString(LocalDataConstant.ACCOUNT_TYPE)) {
-                            ACCOUNT_TYPE.EMAIL.toString() -> FirebaseAPI.deleteAccount(callback)
-                            ACCOUNT_TYPE.KAKAO.toString() -> FirebaseAPI.deleteSNSAccount(callback)
-                        }
+                        FirebaseAPI.deleteAccount(callback)
                         MyApplication.getInstance().getLocalDataManager().setString(LocalDataConstant.UID, "")
                     }
                 }
                 .setNegativeButton("취소") { dialog, id ->
                     dialog.dismiss()
-                }
-            show()
+                }.show()
         }
     }
 
@@ -134,18 +128,13 @@ class OptionActivity : BaseActivity<ActivityOptionBinding>(ActivityOptionBinding
         CoroutineScope(Dispatchers.Main).launch {
             with(MyApplication.getInstance().getLocalDataManager()) {
                 setString(LocalDataConstant.UID, "")
-
-                when (getString(LocalDataConstant.ACCOUNT_TYPE)) {
-                    ACCOUNT_TYPE.EMAIL.toString() -> FirebaseAPI.logout()
-                    ACCOUNT_TYPE.KAKAO.toString() -> KakaoAPI.logout()
-                }
+                FirebaseAPI.logout()
             }
-        }
-
-
-        Intent(this@OptionActivity, AuthActivity::class.java).apply {
-            finishAffinity()
-            startActivity(this)
+        }.invokeOnCompletion {
+            Intent(this@OptionActivity, AuthActivity::class.java).apply {
+                finishAffinity()
+                startActivity(this)
+            }
         }
     }
 }

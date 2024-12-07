@@ -9,7 +9,6 @@ import android.text.style.StyleSpan
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.core.view.forEach
 import androidx.core.view.get
 import app.solution.swing_by.R
 import app.solution.swing_by.api.FirebaseAPI
